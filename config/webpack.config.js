@@ -159,7 +159,8 @@ module.exports = function(webpackEnv) {
         // initialization, it doesn't blow up the WebpackDevServer client, and
         // changing JS code would still trigger a refresh.
       ].filter(Boolean),
-      content: paths.contentJs
+      content: paths.contentJs,
+      background: paths.backgroundJs
   },
   output: {
       // The build folder.

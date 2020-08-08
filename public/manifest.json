@@ -16,5 +16,9 @@
       "js": ["/static/js/content.js"],
       "css": ["/static/css/content.css"]
     }
-  ]
+  ],
+  "background": {
+    "scripts": ["/static/js/background.js"],
+    "persistent": false
+  }
 }
