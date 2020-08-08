@@ -12,6 +12,12 @@
         Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
 }
 
+
+#act-hub-modal-root ul {
+    padding: 0;
+    margin: 0;
+} 
+
 .font-size-medium {
     font-size: 16px !important;
 }
@@ -214,9 +220,3 @@
 .pointer {
     cursor: pointer;
 }
-
-/* @media only screen and  (min-width: 730px) {
-    #act-hub-modal-root.ReactModal__Content {
-        max-width: 683px;
-    }
-} */

@@ -24,6 +24,22 @@ function Main() {
                         <input type="text" className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis no-border no-outline no-box-shadow full-width background-none"/>
                     </div>
                 </div>  
+                <div>
+                    <ul className="list-style-type-none">
+                        <li className="background-selected border-selected padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny" style={{padding: "7px 3px 7px 11px"}}>
+                            <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test</div>
+                        </li>
+                        <li className="padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny">
+                            <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test1</div>
+                        </li>
+                        <li className="padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny">
+                            <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test2</div>
+                        </li>
+                        <li className="padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny">
+                            <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test3</div>
+                        </li>
+                    </ul>
+                </div>
             </div>
     </Modal>
   );
