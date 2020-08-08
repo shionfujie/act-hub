@@ -1,8 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
+
+//This file is required by React
+
+function App() {
+  return (
+    <div id="App">
+    </div>
+  );
+}
 
 ReactDOM.render(
   <React.StrictMode>
