@@ -10,6 +10,6 @@ function Main() {
 }
 
 const app = document.createElement('div');
-app.id = "ActHub Extension Root";
+app.id = "act-hub-extension-root";
 document.body.appendChild(app);
 ReactDOM.render(<Main />, app);
