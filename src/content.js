@@ -4,13 +4,16 @@ import ReactModal from "react-modal";
 import "./css/content.css";
 import usePort from "./hooks/chrome/usePort";
 import useSwitch from "./hooks/useSwitch";
+import useDocumentKeydown from "./hooks/useDocumentKeydown";
 
 function Main() {
   const port = usePort("ActHub");
   const [modalIsOpen, openModal, closeModal] = useSwitch();
-  port.postMessage({ message: "Hello, backgroundJs! -- from contentJs" });
+  useDocumentKeydown(({code, shiftKey, metaKey}) => {
+    if (code == "KeyP" && shiftKey && metaKey) openModal()
+  })
   return (
-    <Modal isOpen={true} onRequestClose={closeModal}>
+    <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
             <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
                 <div className="flexbox flexbox-align-center  padding-left-small padding-right-tiny" style={{height: 44}} > 
                     <div className="flexbox flexbox-centered padding-left-smaller padding-right-medium shade-087">
