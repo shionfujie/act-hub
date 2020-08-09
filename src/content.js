@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import ReactDOM from "react-dom";
 import ReactModal from "react-modal";
 import "./css/content.css";
@@ -64,7 +64,14 @@ function Modal({ isOpen, onRequestClose, children }) {
     );
 }
 
+function useFocusCallback() {
+  return useCallback(el => {
+    if (el) el.focus();
+  }, []);
+}
+
 function SearchInput() {
+    const focusCallback = useFocusCallback()
     return (
         <div className="flexbox flexbox-align-center  padding-left-small padding-right-tiny" style={{ height: 44 }} >
             <div className="flexbox flexbox-centered padding-left-smaller padding-right-medium shade-087">
@@ -75,7 +82,7 @@ function SearchInput() {
                 </svg>
             </div>
             <div class="flexbox-grow-1">
-                <input type="text" className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis no-border no-outline no-box-shadow full-width background-none" />
+                <input type="text" className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis no-border no-outline no-box-shadow full-width background-none" ref={focusCallback}/>
             </div>
         </div>
     )
