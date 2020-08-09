@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import ReactModal from "react-modal";
 import "./css/content.css";
@@ -87,30 +87,47 @@ function SearchInput() {
         </div>
     )
 }
-
+const entries = [
+    { key: 0, title: "Test" },
+    { key: 1, title: "Test1" },
+    { key: 2, title: "Test2" },
+    { key: 3, title: "Test3" }
+];
 function SearchResult() {
-    return (
-        <div>
-            <ul className="list-style-type-none">
-                <SearchResultEntry title={"Test"} highlighted/>
-                <SearchResultEntry title={"Test1"}/>
-                <SearchResultEntry title={"Test2"}/>
-                <SearchResultEntry title={"Test3"}/>
-            </ul>
-        </div>
-    )
+  const [selectedEntryKey, selectEntry] = useState(entries[0].key);
+  return (
+    <div>
+      <ul className="list-style-type-none">
+        {entries.map(({ key, title }) => {
+          return (
+            <SearchResultEntry
+              key={key}
+              title={title}
+              highlighted={key === selectedEntryKey}
+              onMouseEnter={() => selectEntry(key)}
+            />
+          );
+        })}
+      </ul>
+    </div>
+  );
 }
 
 const normalClassName = "padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny"
 const highlightedClassName = `background-selected border-selected ${normalClassName}`
-function SearchResultEntry({title, highlighted}) {
+function SearchResultEntry({title, highlighted, onMouseEnter}) {
     const [isHighlighted, highlightEntry, unhighlightEntry] = useSwitch(highlighted)
+    useEffect(() => {
+        if (!highlighted && isHighlighted) unhighlightEntry();
+    }, [highlighted]);
     const padding = isHighlighted ? { padding: "7px 3px 7px 11px" } : null
     return (
       <li
         className={isHighlighted ? highlightedClassName : normalClassName}
-        onMouseEnter={highlightEntry}
-        onMouseLeave={unhighlightEntry}
+        onMouseEnter={() => {
+            highlightEntry()
+            onMouseEnter()
+        }}
         style={{margin: 0, ...padding}}
       >
         <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">
