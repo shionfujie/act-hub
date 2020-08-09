@@ -30,7 +30,6 @@ function Modal({ isOpen, onRequestClose, children }) {
     return (
       <ReactModal
         id="act-hub-modal-root"
-        // className="padding-horizontal-larger"
         isOpen={isOpen}
         onRequestClose={onRequestClose}
         style={{
