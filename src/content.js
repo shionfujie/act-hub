@@ -9,11 +9,15 @@ import useDocumentKeydown from "./hooks/useDocumentKeydown";
 function Main() {
   const port = usePort("ActHub");
   const [modalIsOpen, openModal, closeModal] = useSwitch();
-  useDocumentKeydown(({code, shiftKey, metaKey}) => {
-    if (code == "KeyP" && shiftKey && metaKey) openModal()
-  })
-  return (
-    <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
+  useDocumentKeydown(({ code, shiftKey, metaKey }) => {
+    if (code == "KeyP" && shiftKey && metaKey) openModal();
+  });
+  return <SearchModal isOpen={modalIsOpen} onRequestClose={closeModal} />;
+}
+
+function SearchModal({isOpen, onRequestClose}) {
+    return (
+        <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
             <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
                 <div className="flexbox flexbox-align-center  padding-left-small padding-right-tiny" style={{height: 44}} > 
                     <div className="flexbox flexbox-centered padding-left-smaller padding-right-medium shade-087">
@@ -45,11 +49,7 @@ function Main() {
                 </div>
             </div>
     </Modal>
-  );
-}
-
-function SearchModal() {
-    return <div></div>
+    )
 }
 
 function Modal({ isOpen, onRequestClose, children }) {
