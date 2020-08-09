@@ -48,6 +48,10 @@ function Main() {
   );
 }
 
+function SearchModal() {
+    return <div></div>
+}
+
 function Modal({ isOpen, onRequestClose, children }) {
     return (
       <ReactModal
@@ -85,7 +89,21 @@ function Modal({ isOpen, onRequestClose, children }) {
         {children}
       </ReactModal>
     );
-  }
+}
+
+function SearchInput() {
+    return <div></div>
+}
+
+function SearchResult() {
+    return <div></div>
+}
+
+function SearchResultEntry() {
+    return <div></div>
+}
+
+
   
 
 
