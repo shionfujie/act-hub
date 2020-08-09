@@ -104,11 +104,20 @@ function SearchResult() {
 const normalClassName = "padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny"
 const highlightedClassName = `background-selected border-selected ${normalClassName}`
 function SearchResultEntry({title, highlighted}) {
+    const [isHighlighted, highlightEntry, unhighlightEntry] = useSwitch(highlighted)
+    const padding = isHighlighted ? { padding: "7px 3px 7px 11px" } : null
     return (
-        <li className={highlighted ? highlightedClassName : normalClassName}>
-            <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">{title}</div>
-        </li>
-    )
+      <li
+        className={isHighlighted ? highlightedClassName : normalClassName}
+        onMouseEnter={highlightEntry}
+        onMouseLeave={unhighlightEntry}
+        style={{margin: 0, ...padding}}
+      >
+        <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">
+          {title}
+        </div>
+      </li>
+    );
 }
 
 
