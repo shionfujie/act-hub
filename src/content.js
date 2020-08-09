@@ -113,13 +113,18 @@ function SearchResult() {
   );
 }
 
+function usePropSwitch(initial=false) {
+    const [v, setState] = useState(initial)
+    useEffect(() => {
+        if (v !== initial) setState(initial);
+    }, [initial]);
+    return [v, () => setState(true), () => setState(false)]
+}
+
 const normalClassName = "padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny"
 const highlightedClassName = `background-selected border-selected ${normalClassName}`
 function SearchResultEntry({title, highlighted, onMouseEnter}) {
-    const [isHighlighted, highlightEntry, unhighlightEntry] = useSwitch(highlighted)
-    useEffect(() => {
-        if (!highlighted && isHighlighted) unhighlightEntry();
-    }, [highlighted]);
+    const [isHighlighted, highlightEntry] = usePropSwitch(highlighted)
     const padding = isHighlighted ? { padding: "7px 3px 7px 11px" } : null
     return (
       <li
