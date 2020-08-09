@@ -9,50 +9,27 @@ import useDocumentKeydown from "./hooks/useDocumentKeydown";
 function Main() {
   const port = usePort("ActHub");
   const [modalIsOpen, openModal, closeModal] = useSwitch();
-  useDocumentKeydown(({code, shiftKey, metaKey}) => {
-    if (code == "KeyP" && shiftKey && metaKey) openModal()
-  })
-  return (
-    <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
+  useDocumentKeydown(({ code, shiftKey, metaKey }) => {
+    if (code == "KeyP" && shiftKey && metaKey) openModal();
+  });
+  return <SearchModal isOpen={modalIsOpen} onRequestClose={closeModal} />;
+}
+
+function SearchModal({isOpen, onRequestClose}) {
+    return (
+        <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
             <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
-                <div className="flexbox flexbox-align-center  padding-left-small padding-right-tiny" style={{height: 44}} > 
-                    <div className="flexbox flexbox-centered padding-left-smaller padding-right-medium shade-087">
-                        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style={{stroke: "currentColor", strokeWidth: 4, height: 16, width: 16, display: "block"}}>
-                            <g fill="none">
-                                <path d="m13 24c6.0751322 0 11-4.9248678 11-11 0-6.07513225-4.9248678-11-11-11-6.07513225 0-11 4.92486775-11 11 0 6.0751322 4.92486775 11 11 11zm8-3 9 9"></path>
-                            </g>
-                        </svg>
-                    </div>
-                    <div class="flexbox-grow-1">
-                        <input type="text" className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis no-border no-outline no-box-shadow full-width background-none"/>
-                    </div>
-                </div>  
-                <div>
-                    <ul className="list-style-type-none">
-                        <li className="background-selected border-selected padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny" style={{padding: "7px 3px 7px 11px"}}>
-                            <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test</div>
-                        </li>
-                        <li className="padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny">
-                            <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test1</div>
-                        </li>
-                        <li className="padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny">
-                            <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test2</div>
-                        </li>
-                        <li className="padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny">
-                            <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test3</div>
-                        </li>
-                    </ul>
-                </div>
+                <SearchInput/> 
+                <SearchResult/>
             </div>
     </Modal>
-  );
+    )
 }
 
 function Modal({ isOpen, onRequestClose, children }) {
     return (
       <ReactModal
         id="act-hub-modal-root"
-        // className="padding-horizontal-larger"
         isOpen={isOpen}
         onRequestClose={onRequestClose}
         style={{
@@ -85,7 +62,49 @@ function Modal({ isOpen, onRequestClose, children }) {
         {children}
       </ReactModal>
     );
-  }
+}
+
+function SearchInput() {
+    return (
+        <div className="flexbox flexbox-align-center  padding-left-small padding-right-tiny" style={{ height: 44 }} >
+            <div className="flexbox flexbox-centered padding-left-smaller padding-right-medium shade-087">
+                <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style={{ stroke: "currentColor", strokeWidth: 4, height: 16, width: 16, display: "block" }}>
+                    <g fill="none">
+                        <path d="m13 24c6.0751322 0 11-4.9248678 11-11 0-6.07513225-4.9248678-11-11-11-6.07513225 0-11 4.92486775-11 11 0 6.0751322 4.92486775 11 11 11zm8-3 9 9"></path>
+                    </g>
+                </svg>
+            </div>
+            <div class="flexbox-grow-1">
+                <input type="text" className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis no-border no-outline no-box-shadow full-width background-none" />
+            </div>
+        </div>
+    )
+}
+
+function SearchResult() {
+    return (
+        <div>
+            <ul className="list-style-type-none">
+                <SearchResultEntry title={"Test"} highlighted/>
+                <SearchResultEntry title={"Test1"}/>
+                <SearchResultEntry title={"Test2"}/>
+                <SearchResultEntry title={"Test3"}/>
+            </ul>
+        </div>
+    )
+}
+
+const normalClassName = "padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny"
+const highlightedClassName = `background-selected border-selected ${normalClassName}`
+function SearchResultEntry({title, highlighted}) {
+    return (
+        <li className={highlighted ? highlightedClassName : normalClassName}>
+            <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">{title}</div>
+        </li>
+    )
+}
+
+
   
 
 
