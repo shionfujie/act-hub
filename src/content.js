@@ -86,25 +86,23 @@ function SearchResult() {
     return (
         <div>
             <ul className="list-style-type-none">
-                <li className="background-selected border-selected padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny" style={{ padding: "7px 3px 7px 11px" }}>
-                    <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test</div>
-                </li>
-                <li className="padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny">
-                    <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test1</div>
-                </li>
-                <li className="padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny">
-                    <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test2</div>
-                </li>
-                <li className="padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny">
-                    <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test3</div>
-                </li>
+                <SearchResultEntry title={"Test"} highlighted/>
+                <SearchResultEntry title={"Test1"}/>
+                <SearchResultEntry title={"Test2"}/>
+                <SearchResultEntry title={"Test3"}/>
             </ul>
         </div>
     )
 }
 
-function SearchResultEntry() {
-    return <div></div>
+const normalClassName = "padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny"
+const highlightedClassName = `background-selected border-selected ${normalClassName}`
+function SearchResultEntry({title, highlighted}) {
+    return (
+        <li className={highlighted ? highlightedClassName : normalClassName}>
+            <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">{title}</div>
+        </li>
+    )
 }
 
 
