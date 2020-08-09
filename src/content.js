@@ -12,15 +12,23 @@ function Main() {
   useDocumentKeydown(({ code, shiftKey, metaKey }) => {
     if (code == "KeyP" && shiftKey && metaKey) openModal();
   });
-  return <SearchModal isOpen={modalIsOpen} onRequestClose={closeModal} />;
+  return (
+    <SearchModal
+      isOpen={modalIsOpen}
+      onRequestClose={closeModal}
+      onSelectAction={action => {
+        port.postMessage(action)
+      }}
+    />
+  );
 }
 
-function SearchModal({isOpen, onRequestClose}) {
+function SearchModal({isOpen, onRequestClose, onSelectAction}) {
     return (
         <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
             <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
                 <SearchInput/> 
-                <SearchResult/>
+                <SearchResult onSelectAction={onSelectAction}/>
             </div>
     </Modal>
     )
@@ -93,7 +101,7 @@ const entries = [
     { key: 2, title: "Test2" },
     { key: 3, title: "Test3" }
 ];
-function SearchResult() {
+function SearchResult({onSelectAction}) {
   const [selectedEntryKey, selectEntry] = useState(entries[0].key);
   return (
     <div>
@@ -105,6 +113,9 @@ function SearchResult() {
               title={title}
               highlighted={key === selectedEntryKey}
               onMouseEnter={() => selectEntry(key)}
+              onClick={() => 
+                onSelectAction({action: "EXAMPLE", message: `Hello, SHION! -- from [${key}]`})
+              }
             />
           );
         })}
@@ -123,7 +134,7 @@ function usePropSwitch(initial=false) {
 
 const normalClassName = "padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny"
 const highlightedClassName = `background-selected border-selected ${normalClassName}`
-function SearchResultEntry({title, highlighted, onMouseEnter}) {
+function SearchResultEntry({title, highlighted, onMouseEnter, onClick}) {
     const [isHighlighted, highlightEntry] = usePropSwitch(highlighted)
     const padding = isHighlighted ? { padding: "7px 3px 7px 11px" } : null
     return (
@@ -133,6 +144,7 @@ function SearchResultEntry({title, highlighted, onMouseEnter}) {
             highlightEntry()
             onMouseEnter()
         }}
+        onClick={onClick}
         style={{margin: 0, ...padding}}
       >
         <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">
