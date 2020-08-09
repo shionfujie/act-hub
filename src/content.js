@@ -20,22 +20,7 @@ function SearchModal({isOpen, onRequestClose}) {
         <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
             <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
                 <SearchInput/> 
-                <div>
-                    <ul className="list-style-type-none">
-                        <li className="background-selected border-selected padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny" style={{padding: "7px 3px 7px 11px"}}>
-                            <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test</div>
-                        </li>
-                        <li className="padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny">
-                            <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test1</div>
-                        </li>
-                        <li className="padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny">
-                            <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test2</div>
-                        </li>
-                        <li className="padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny">
-                            <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test3</div>
-                        </li>
-                    </ul>
-                </div>
+                <SearchResult/>
             </div>
     </Modal>
     )
@@ -98,7 +83,24 @@ function SearchInput() {
 }
 
 function SearchResult() {
-    return <div></div>
+    return (
+        <div>
+            <ul className="list-style-type-none">
+                <li className="background-selected border-selected padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny" style={{ padding: "7px 3px 7px 11px" }}>
+                    <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test</div>
+                </li>
+                <li className="padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny">
+                    <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test1</div>
+                </li>
+                <li className="padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny">
+                    <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test2</div>
+                </li>
+                <li className="padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny">
+                    <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">Test3</div>
+                </li>
+            </ul>
+        </div>
+    )
 }
 
 function SearchResultEntry() {
