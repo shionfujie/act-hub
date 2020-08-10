@@ -134,11 +134,16 @@ function SearchResult({onSelectAction}) {
   );
 }
 
+function usePDState(initial) {
+  const [v, setState] = useState(initial)
+  useEffect(() => {
+      if (v !== initial) setState(initial);
+  }, [initial]);
+  return [v, setState]
+}
+
 function usePropSwitch(initial=false) {
-    const [v, setState] = useState(initial)
-    useEffect(() => {
-        if (v !== initial) setState(initial);
-    }, [initial]);
+    const [v, setState] = usePDState(initial)
     return [v, () => setState(true), () => setState(false)]
 }
 
