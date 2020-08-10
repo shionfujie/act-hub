@@ -142,14 +142,14 @@ function usePDState(initial) {
   return [v, setState]
 }
 
-function usePropSwitch(initial=false) {
+function usePDSwitch(initial=false) {
     const [v, setState] = usePDState(initial)
     return [v, () => setState(true), () => setState(false)]
 }
 
 function highlightedOnMouseEnter(C) {
   return function ({ highlighted, onMouseEnter, ...props }) {
-    const [isHighlighted, highlightEntry] = usePropSwitch(highlighted)
+    const [isHighlighted, highlightEntry] = usePDSwitch(highlighted)
     return <C
       isHighlighted={isHighlighted}
       onMouseEnter={() => {
