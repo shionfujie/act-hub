@@ -134,17 +134,22 @@ function SearchResult({onSelectAction}) {
   );
 }
 
-function usePropSwitch(initial=false) {
-    const [v, setState] = useState(initial)
-    useEffect(() => {
-        if (v !== initial) setState(initial);
-    }, [initial]);
+function usePDState(initial) {
+  const [v, setState] = useState(initial)
+  useEffect(() => {
+      if (v !== initial) setState(initial);
+  }, [initial]);
+  return [v, setState]
+}
+
+function usePDSwitch(initial=false) {
+    const [v, setState] = usePDState(initial)
     return [v, () => setState(true), () => setState(false)]
 }
 
 function highlightedOnMouseEnter(C) {
   return function ({ highlighted, onMouseEnter, ...props }) {
-    const [isHighlighted, highlightEntry] = usePropSwitch(highlighted)
+    const [isHighlighted, highlightEntry] = usePDSwitch(highlighted)
     return <C
       isHighlighted={isHighlighted}
       onMouseEnter={() => {
