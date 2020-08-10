@@ -103,6 +103,14 @@ const entries = [
 ];
 function SearchResult({onSelectAction}) {
   const [selectedEntry, selectEntry] = useState({key: entries[0].key, index: 0});
+  useDocumentKeydown(({code}) => {
+    if (code === "ArrowUp") shiftSelection(-1);
+    else if (code === "ArrowDown") shiftSelection(1);
+  })
+  function shiftSelection(offset) {
+    const index = selectedEntry.index + offset
+    if (- 1 < index < entries.length) selectEntry({key: entries[index].key, index})
+  }
   return (
     <div>
       <ul className="list-style-type-none">
