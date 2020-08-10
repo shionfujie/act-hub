@@ -9,8 +9,8 @@ import useDocumentKeydown from "./hooks/useDocumentKeydown";
 function Main() {
   const port = usePort("ActHub");
   const [modalIsOpen, openModal, closeModal] = useSwitch();
-  useDocumentKeydown(({ code, shiftKey, metaKey }) => {
-    if (code == "KeyP" && shiftKey && metaKey) openModal();
+  useDocumentKeydown(({ key, shiftKey, metaKey }) => {
+    if (key == "KeyP" && shiftKey && metaKey) openModal();
   });
   return (
     <SearchModal
@@ -103,13 +103,17 @@ const entries = [
 ];
 function SearchResult({onSelectAction}) {
   const [selectedEntry, selectEntry] = useState({key: entries[0].key, index: 0});
-  useDocumentKeydown(({code}) => {
-    if (code === "ArrowUp") shiftSelection(-1);
-    else if (code === "ArrowDown") shiftSelection(1);
+  useDocumentKeydown(({key}) => {
+    if (key === "ArrowUp") shiftSelection(-1);
+    else if (key === "ArrowDown") shiftSelection(1);
+    else if (key === "Enter") submitSelection()
   })
   function shiftSelection(offset) {
     const index = selectedEntry.index + offset
     if (- 1 < index < entries.length) selectEntry({key: entries[index].key, index})
+  }
+  function submitSelection() {
+    onSelectAction({action: "EXAMPLE", message: `Hello, SHION! -- from [${selectedEntry.key}]`})
   }
   return (
     <div>
@@ -121,9 +125,7 @@ function SearchResult({onSelectAction}) {
               title={title}
               highlighted={key === selectedEntry.key}
               onMouseEnter={() => selectEntry({key, index})}
-              onClick={() => 
-                onSelectAction({action: "EXAMPLE", message: `Hello, SHION! -- from [${key}]`})
-              }
+              onClick={submitSelection}
             />
           );
         })}
