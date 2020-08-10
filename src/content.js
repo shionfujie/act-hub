@@ -106,10 +106,14 @@ function SearchResult({onSelectAction}) {
   useDocumentKeydown(({code}) => {
     if (code === "ArrowUp") shiftSelection(-1);
     else if (code === "ArrowDown") shiftSelection(1);
+    else if (code === "Enter") submitSelection()
   })
   function shiftSelection(offset) {
     const index = selectedEntry.index + offset
     if (- 1 < index < entries.length) selectEntry({key: entries[index].key, index})
+  }
+  function submitSelection() {
+    onSelectAction({action: "EXAMPLE", message: `Hello, SHION! -- from [${selectedEntry.key}]`})
   }
   return (
     <div>
@@ -121,9 +125,7 @@ function SearchResult({onSelectAction}) {
               title={title}
               highlighted={key === selectedEntry.key}
               onMouseEnter={() => selectEntry({key, index})}
-              onClick={() => 
-                onSelectAction({action: "EXAMPLE", message: `Hello, SHION! -- from [${key}]`})
-              }
+              onClick={submitSelection}
             />
           );
         })}
