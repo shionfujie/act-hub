@@ -102,17 +102,17 @@ const entries = [
     { key: 3, title: "Test3" }
 ];
 function SearchResult({onSelectAction}) {
-  const [selectedEntryKey, selectEntry] = useState(entries[0].key);
+  const [selectedEntry, selectEntry] = useState({key: entries[0].key, index: 0});
   return (
     <div>
       <ul className="list-style-type-none">
-        {entries.map(({ key, title }) => {
+        {entries.map(({ key, title }, index) => {
           return (
             <SearchResultEntry
               key={key}
               title={title}
-              highlighted={key === selectedEntryKey}
-              onMouseEnter={() => selectEntry(key)}
+              highlighted={key === selectedEntry.key}
+              onMouseEnter={() => selectEntry({key, index})}
               onClick={() => 
                 onSelectAction({action: "EXAMPLE", message: `Hello, SHION! -- from [${key}]`})
               }
