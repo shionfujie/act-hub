@@ -10,7 +10,7 @@ function Main() {
   const port = usePort("ActHub");
   const [modalIsOpen, openModal, closeModal] = useSwitch();
   useDocumentKeydown(({ key, shiftKey, metaKey }) => {
-    if (key == "KeyP" && shiftKey && metaKey) openModal();
+    if (key == "p" && shiftKey && metaKey) openModal();
   });
   return (
     <SearchModal
