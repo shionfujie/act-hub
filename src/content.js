@@ -102,17 +102,25 @@ const entries = [
     { key: 3, title: "Test3" }
 ];
 function SearchResult({onSelectAction}) {
-  const [selectedEntryKey, selectEntry] = useState(entries[0].key);
+  const [selectedEntry, selectEntry] = useState({key: entries[0].key, index: 0});
+  useDocumentKeydown(({code}) => {
+    if (code === "ArrowUp") shiftSelection(-1);
+    else if (code === "ArrowDown") shiftSelection(1);
+  })
+  function shiftSelection(offset) {
+    const index = selectedEntry.index + offset
+    if (- 1 < index < entries.length) selectEntry({key: entries[index].key, index})
+  }
   return (
     <div>
       <ul className="list-style-type-none">
-        {entries.map(({ key, title }) => {
+        {entries.map(({ key, title }, index) => {
           return (
             <SearchResultEntry
               key={key}
               title={title}
-              highlighted={key === selectedEntryKey}
-              onMouseEnter={() => selectEntry(key)}
+              highlighted={key === selectedEntry.key}
+              onMouseEnter={() => selectEntry({key, index})}
               onClick={() => 
                 onSelectAction({action: "EXAMPLE", message: `Hello, SHION! -- from [${key}]`})
               }
