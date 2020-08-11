@@ -4,9 +4,9 @@ import ReactDOM from "react-dom";
 import ReactModal from "react-modal";
 import "./css/content.css";
 import usePort from "./hooks/chrome/usePort";
-import usePDSwitch from "./hooks/usePDSwitch"
 import useSwitch from "./hooks/useSwitch";
 import useDocumentKeydown from "./hooks/useDocumentKeydown";
+import SearchResultEntry from "./components/SearchResultEntry"
 
 const extensionSpec = {
   id: "mocjdmglnkelnbnfnklgfgphebdbaopl",
@@ -169,62 +169,6 @@ function SearchResult({onSelectAction}) {
     </div>
   );
 }
-
-function highlightedOnMouseEnter(C) {
-  return function ({ highlighted, onMouseEnter, ...props }) {
-    const [isHighlighted, highlightEntry] = usePDSwitch(highlighted)
-    return <C
-      isHighlighted={isHighlighted}
-      onMouseEnter={() => {
-        highlightEntry()
-        onMouseEnter()
-      }}
-      {...props}
-    />
-  }
-}
-
-const normalClassName = "padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny"
-const highlightedClassName = `background-selected border-selected ${normalClassName}`
-const SearchResultEntry = highlightedOnMouseEnter(({title, isHighlighted, onMouseEnter, onClick}) => {
-    const padding = isHighlighted ? { padding: "7px 3px 7px 11px" } : null
-    return (
-      <li
-        className={isHighlighted ? highlightedClassName : normalClassName}
-        onMouseEnter={onMouseEnter}
-        onClick={onClick}
-        style={{margin: 0, ...padding}}
-      >
-        <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">
-          {title}
-        </div>
-      </li>
-    );
-})
-// function SearchResultEntry({title, highlighted, onMouseEnter, onClick}) {
-//     const [isHighlighted, highlightEntry] = usePropSwitch(highlighted)
-//     const padding = isHighlighted ? { padding: "7px 3px 7px 11px" } : null
-//     return (
-//       <li
-//         className={isHighlighted ? highlightedClassName : normalClassName}
-//         onMouseEnter={() => {
-//             highlightEntry()
-//             onMouseEnter()
-//         }}
-//         onClick={onClick}
-//         style={{margin: 0, ...padding}}
-//       >
-//         <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">
-//           {title}
-//         </div>
-//       </li>
-//     );
-// }
-
-
-  
-
-
 
 const app = document.createElement("div");
 app.id = "act-hub-extension-root";
