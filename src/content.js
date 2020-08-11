@@ -1,9 +1,10 @@
 /* global chrome */
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
 import ReactDOM from "react-dom";
 import ReactModal from "react-modal";
 import "./css/content.css";
 import usePort from "./hooks/chrome/usePort";
+import usePDState from "./hooks/usePDState"
 import useSwitch from "./hooks/useSwitch";
 import useDocumentKeydown from "./hooks/useDocumentKeydown";
 
@@ -167,14 +168,6 @@ function SearchResult({onSelectAction}) {
       </ul>
     </div>
   );
-}
-
-function usePDState(initial) {
-  const [v, setState] = useState(initial)
-  useEffect(() => {
-      if (v !== initial) setState(initial);
-  }, [initial]);
-  return [v, setState]
 }
 
 function usePDSwitch(initial=false) {
