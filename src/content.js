@@ -27,6 +27,7 @@ function Main() {
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
       onSelectAction={(id, action) => {
+        closeModal()
         chrome.runtime.sendMessage(id, {type: "execute action", action})
       }}
     />
