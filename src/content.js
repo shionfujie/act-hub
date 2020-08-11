@@ -107,13 +107,13 @@ function SearchInput() {
     )
 }
 const entries = [
-    { key: 0, title: "Test" },
-    { key: 1, title: "Test1" },
-    { key: 2, title: "Test2" },
-    { key: 3, title: "Test3" }
+    { key: 0, title: "Test", extensionId: extensionSpec.id, action: extensionSpec.actions[0]},
+    { key: 1, title: "Test1", extensionId: extensionSpec.id, action: extensionSpec.actions[0]},
+    { key: 2, title: "Test2", extensionId: extensionSpec.id, action: extensionSpec.actions[0]},
+    { key: 3, title: "Test3", extensionId: extensionSpec.id, action: extensionSpec.actions[0]}
 ];
 function SearchResult({onSelectAction}) {
-  const [selectedEntry, selectEntry] = useState({key: entries[0].key, index: 0});
+  const [selectedEntry, selectEntry] = useState({index: 0, ...entries[0]});
   useDocumentKeydown(({key}) => {
     if (key === "ArrowUp") shiftSelection(-1);
     else if (key === "ArrowDown") shiftSelection(1);
@@ -121,21 +121,21 @@ function SearchResult({onSelectAction}) {
   })
   function shiftSelection(offset) {
     const index = selectedEntry.index + offset
-    if (- 1 < index < entries.length) selectEntry({key: entries[index].key, index})
+    if (- 1 < index < entries.length) selectEntry({index, ...entries[index]})
   }
   function submitSelection() {
-    onSelectAction(extensionSpec.id, extensionSpec.actions[0])
+    onSelectAction(selectedEntry.extensionId, selectedEntry.action)
   }
   return (
     <div>
       <ul className="list-style-type-none">
-        {entries.map(({ key, title }, index) => {
+        {entries.map((entry, index) => {
           return (
             <SearchResultEntry
-              key={key}
-              title={title}
-              highlighted={key === selectedEntry.key}
-              onMouseEnter={() => selectEntry({key, index})}
+              key={entry.key}
+              title={entry.title}
+              highlighted={entry.key === selectedEntry.key}
+              onMouseEnter={() => selectEntry({index, ...entry})}
               onClick={submitSelection}
             />
           );
