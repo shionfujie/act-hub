@@ -14,6 +14,18 @@ const extensionSpec = {
     {
       name: "list stash entries",
       displayName: "List Stash Entries"
+    },
+    {
+      name: "detach",
+      displayName: "Detach Tabs"
+    },
+    {
+      name: "duplicate",
+      displayName: "Duplicate Current Tab"
+    },
+    {
+      name: "stash",
+      displayName: "Stash Tabs"
     }
   ]
 }
