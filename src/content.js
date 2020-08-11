@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import ReactModal from "react-modal";
 import "./css/content.css";
 import usePort from "./hooks/chrome/usePort";
-import usePDState from "./hooks/usePDState"
+import usePDSwitch from "./hooks/usePDSwitch"
 import useSwitch from "./hooks/useSwitch";
 import useDocumentKeydown from "./hooks/useDocumentKeydown";
 
@@ -168,11 +168,6 @@ function SearchResult({onSelectAction}) {
       </ul>
     </div>
   );
-}
-
-function usePDSwitch(initial=false) {
-    const [v, setState] = usePDState(initial)
-    return [v, () => setState(true), () => setState(false)]
 }
 
 function highlightedOnMouseEnter(C) {
