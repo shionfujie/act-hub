@@ -9,9 +9,11 @@ import useDocumentKeydown from "./hooks/useDocumentKeydown";
 
 const extensionSpec = {
   id: "mocjdmglnkelnbnfnklgfgphebdbaopl",
+  name: "WiNager",
   actions: [
     {
-      name: "list stash entries"
+      name: "list stash entries",
+      displayName: "List Stash Entries"
     }
   ]
 }
@@ -106,12 +108,20 @@ function SearchInput() {
         </div>
     )
 }
-const entries = [
-    { key: 0, title: "Test", extensionId: extensionSpec.id, action: extensionSpec.actions[0]},
-    { key: 1, title: "Test1", extensionId: extensionSpec.id, action: extensionSpec.actions[0]},
-    { key: 2, title: "Test2", extensionId: extensionSpec.id, action: extensionSpec.actions[0]},
-    { key: 3, title: "Test3", extensionId: extensionSpec.id, action: extensionSpec.actions[0]}
-];
+
+function extensionSpecToEntries({id, name, actions}) {
+  return actions.map((action, index) => {
+    return {
+      key: index,
+      extensionId: id,
+      title: action.displayName || `${name}: ${action.name}`,
+      action
+    }
+  })
+}
+
+const entries = extensionSpecToEntries(extensionSpec);
+
 function SearchResult({onSelectAction}) {
   const [selectedIndex, selectEntry] = useState(0);
   const getSelectedEntry = () => entries[selectedIndex]
