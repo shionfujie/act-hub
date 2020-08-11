@@ -1,3 +1,4 @@
+/* global chrome */
 import React, { useCallback, useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import ReactModal from "react-modal";
@@ -5,6 +6,15 @@ import "./css/content.css";
 import usePort from "./hooks/chrome/usePort";
 import useSwitch from "./hooks/useSwitch";
 import useDocumentKeydown from "./hooks/useDocumentKeydown";
+
+const extensionSpec = {
+  id: "mocjdmglnkelnbnfnklgfgphebdbaopl",
+  actions: [
+    {
+      name: "list stash entries"
+    }
+  ]
+}
 
 function Main() {
   const port = usePort("ActHub");
@@ -16,8 +26,8 @@ function Main() {
     <SearchModal
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
-      onSelectAction={action => {
-        port.postMessage(action)
+      onSelectAction={(id, action) => {
+        chrome.runtime.sendMessage(id, action)
       }}
     />
   );
@@ -113,7 +123,7 @@ function SearchResult({onSelectAction}) {
     if (- 1 < index < entries.length) selectEntry({key: entries[index].key, index})
   }
   function submitSelection() {
-    onSelectAction({action: "EXAMPLE", message: `Hello, SHION! -- from [${selectedEntry.key}]`})
+    onSelectAction(extensionSpec.id, extensionSpec.actions[0])
   }
   return (
     <div>
