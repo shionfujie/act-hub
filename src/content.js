@@ -113,17 +113,19 @@ const entries = [
     { key: 3, title: "Test3", extensionId: extensionSpec.id, action: extensionSpec.actions[0]}
 ];
 function SearchResult({onSelectAction}) {
-  const [selectedEntry, selectEntry] = useState({index: 0, ...entries[0]});
+  const [selectedIndex, selectEntry] = useState(0);
+  const getSelectedEntry = () => entries[selectedIndex]
   useDocumentKeydown(({key}) => {
     if (key === "ArrowUp") shiftSelection(-1);
     else if (key === "ArrowDown") shiftSelection(1);
     else if (key === "Enter") submitSelection()
   })
   function shiftSelection(offset) {
-    const index = selectedEntry.index + offset
-    if (- 1 < index < entries.length) selectEntry({index, ...entries[index]})
+    const index = selectedIndex + offset
+    if (- 1 < index < entries.length) selectEntry(index)
   }
   function submitSelection() {
+    const selectedEntry = getSelectedEntry()
     onSelectAction(selectedEntry.extensionId, selectedEntry.action)
   }
   return (
@@ -134,8 +136,8 @@ function SearchResult({onSelectAction}) {
             <SearchResultEntry
               key={entry.key}
               title={entry.title}
-              highlighted={entry.key === selectedEntry.key}
-              onMouseEnter={() => selectEntry({index, ...entry})}
+              highlighted={entry.key === getSelectedEntry().key}
+              onMouseEnter={() => selectEntry(index)}
               onClick={submitSelection}
             />
           );
