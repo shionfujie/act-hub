@@ -1,3 +1,4 @@
+/* global chrome */
 import React, { useCallback, useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import ReactModal from "react-modal";
@@ -5,6 +6,29 @@ import "./css/content.css";
 import usePort from "./hooks/chrome/usePort";
 import useSwitch from "./hooks/useSwitch";
 import useDocumentKeydown from "./hooks/useDocumentKeydown";
+
+const extensionSpec = {
+  id: "mocjdmglnkelnbnfnklgfgphebdbaopl",
+  name: "WiNager",
+  actions: [
+    {
+      name: "list stash entries",
+      displayName: "List Stash Entries"
+    },
+    {
+      name: "detach",
+      displayName: "Detach Tabs"
+    },
+    {
+      name: "duplicate",
+      displayName: "Duplicate Current Tab"
+    },
+    {
+      name: "stash",
+      displayName: "Stash Tabs"
+    }
+  ]
+}
 
 function Main() {
   const port = usePort("ActHub");
@@ -16,8 +40,9 @@ function Main() {
     <SearchModal
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
-      onSelectAction={action => {
-        port.postMessage(action)
+      onSelectAction={(id, action) => {
+        closeModal()
+        chrome.runtime.sendMessage(id, {type: "execute action", action})
       }}
     />
   );
@@ -95,36 +120,46 @@ function SearchInput() {
         </div>
     )
 }
-const entries = [
-    { key: 0, title: "Test" },
-    { key: 1, title: "Test1" },
-    { key: 2, title: "Test2" },
-    { key: 3, title: "Test3" }
-];
+
+function extensionSpecToEntries({id, name, actions}) {
+  return actions.map((action, index) => {
+    return {
+      key: index,
+      extensionId: id,
+      title: action.displayName || `${name}: ${action.name}`,
+      action
+    }
+  })
+}
+
+const entries = extensionSpecToEntries(extensionSpec);
+
 function SearchResult({onSelectAction}) {
-  const [selectedEntry, selectEntry] = useState({key: entries[0].key, index: 0});
+  const [selectedIndex, selectEntry] = useState(0);
+  const getSelectedEntry = () => entries[selectedIndex]
   useDocumentKeydown(({key}) => {
     if (key === "ArrowUp") shiftSelection(-1);
     else if (key === "ArrowDown") shiftSelection(1);
     else if (key === "Enter") submitSelection()
   })
   function shiftSelection(offset) {
-    const index = selectedEntry.index + offset
-    if (- 1 < index < entries.length) selectEntry({key: entries[index].key, index})
+    const index = selectedIndex + offset
+    if (- 1 < index < entries.length) selectEntry(index)
   }
   function submitSelection() {
-    onSelectAction({action: "EXAMPLE", message: `Hello, SHION! -- from [${selectedEntry.key}]`})
+    const selectedEntry = getSelectedEntry()
+    onSelectAction(selectedEntry.extensionId, selectedEntry.action)
   }
   return (
     <div>
       <ul className="list-style-type-none">
-        {entries.map(({ key, title }, index) => {
+        {entries.map((entry, index) => {
           return (
             <SearchResultEntry
-              key={key}
-              title={title}
-              highlighted={key === selectedEntry.key}
-              onMouseEnter={() => selectEntry({key, index})}
+              key={entry.key}
+              title={entry.title}
+              highlighted={entry.key === getSelectedEntry().key}
+              onMouseEnter={() => selectEntry(index)}
               onClick={submitSelection}
             />
           );
