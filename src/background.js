@@ -1,7 +1,7 @@
 /*global chrome*/
 
 chrome.management.onInstalled.addListener(({id}) => {
-  chrome.runtime.sendMessage(id, {type: "action spec"}, storeActionSpec)
+  chrome.runtime.sendMessage(id, {type: "action spec"}, spec => storeActionSpec({id, ...spec}))
 })
 
 function storeActionSpec(thisSpec) {
