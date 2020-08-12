@@ -49,15 +49,18 @@ function Main() {
   );
 }
 
-function SearchModal({isOpen, onRequestClose, onSelectAction}) {
-    return (
-        <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
-            <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
-                <SearchInput/> 
-                <SearchResult onSelectAction={onSelectAction}/>
-            </div>
+function SearchModal({ isOpen, onRequestClose, onSelectAction }) {
+  return (
+    <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
+      <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
+        <SearchInput />
+        <SearchResult
+          entries={extensionSpecToEntries(extensionSpec)}
+          onSelectAction={onSelectAction}
+        />
+      </div>
     </Modal>
-    )
+  );
 }
 
 function Modal({ isOpen, onRequestClose, children }) {
@@ -133,9 +136,7 @@ function extensionSpecToEntries({id, name, actions}) {
   })
 }
 
-const entries = extensionSpecToEntries(extensionSpec);
-
-function SearchResult({onSelectAction}) {
+function SearchResult({onSelectAction, entries}) {
   const [selectedIndex, selectEntry] = useState(0);
   const getSelectedEntry = () => entries[selectedIndex]
   useDocumentKeydown(({key}) => {
