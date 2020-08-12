@@ -2,13 +2,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./css/content.css";
-import usePort from "./hooks/chrome/usePort";
 import useSwitch from "./hooks/useSwitch";
 import useDocumentKeydown from "./hooks/useDocumentKeydown";
 import SearchModal from "./components/SearchModal";
 
 function Main() {
-  const port = usePort("ActHub");
   const [modalIsOpen, openModal, closeModal] = useSwitch();
   useDocumentKeydown(({ key, shiftKey, metaKey }) => {
     if (key == "p" && shiftKey && metaKey) openModal();
