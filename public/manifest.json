@@ -1,7 +1,7 @@
 {
   "name": "ActHub",
   "description": "Hub for all chrome actions",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "manifest_version": 2,
   "icons": {
     "16": "./get_started16.png",
