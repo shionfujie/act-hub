@@ -54,7 +54,7 @@ const extensionSpec = {
 function extensionSpecToEntries({ id, name, actions }) {
   return actions.map((action, index) => {
     return {
-      key: index,
+      key: `${id}-${index}`,
       extensionId: id,
       title: action.displayName || `${name}: ${action.name}`,
       action
