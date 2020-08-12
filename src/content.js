@@ -1,10 +1,11 @@
 /* global chrome */
-import React, { useCallback } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import ReactModal from "react-modal";
 import "./css/content.css";
 import usePort from "./hooks/chrome/usePort";
 import useSwitch from "./hooks/useSwitch";
+import useFocusCallback from "./hooks/useFocusCallback";
 import useDocumentKeydown from "./hooks/useDocumentKeydown";
 import SearchResult from "./components/SearchResult";
 
@@ -99,12 +100,6 @@ function Modal({ isOpen, onRequestClose, children }) {
         {children}
       </ReactModal>
     );
-}
-
-function useFocusCallback() {
-  return useCallback(el => {
-    if (el) el.focus();
-  }, []);
 }
 
 function SearchInput() {
