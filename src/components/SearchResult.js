@@ -12,7 +12,7 @@ export default function SearchResult({ onSelectAction, entries }) {
   });
   function shiftSelection(offset) {
     const index = selectedIndex + offset;
-    if (-1 < index < entries.length) selectEntry(index);
+    if (-1 < index && index < entries.length) selectEntry(index);
   }
   function submitSelection() {
     const selectedEntry = getSelectedEntry();
