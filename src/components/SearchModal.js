@@ -1,4 +1,5 @@
-import React from "react";
+/*global chrome*/
+import React, {useState, useEffect} from "react";
 import ReactModal from "react-modal";
 import SearchResult from "./SearchResult";
 import SearchInput from "./SearchInput";
@@ -8,12 +9,18 @@ export default function SearchModal({
   onRequestClose,
   onSelectAction
 }) {
+  const [entries, setEntries] = useState([])
+  console.debug(entries)
+  useEffect(() => {
+    chrome.storage.sync.get({actionSpecs: []}, ({actionSpecs}) => 
+      setEntries(actionSpecs.flatMap(extensionSpecToEntries)))
+  }, [])
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
         <SearchInput />
         <SearchResult
-          entries={extensionSpecToEntries(extensionSpec)}
+          entries={entries}
           onSelectAction={onSelectAction}
         />
       </div>
