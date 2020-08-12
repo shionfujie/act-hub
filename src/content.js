@@ -1,12 +1,12 @@
 /* global chrome */
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import ReactDOM from "react-dom";
 import ReactModal from "react-modal";
 import "./css/content.css";
 import usePort from "./hooks/chrome/usePort";
 import useSwitch from "./hooks/useSwitch";
 import useDocumentKeydown from "./hooks/useDocumentKeydown";
-import SearchResultEntry from "./components/SearchResultEntry"
+import SearchResult from "./components/SearchResult";
 
 const extensionSpec = {
   id: "mocjdmglnkelnbnfnklgfgphebdbaopl",
@@ -134,41 +134,6 @@ function extensionSpecToEntries({id, name, actions}) {
       action
     }
   })
-}
-
-function SearchResult({onSelectAction, entries}) {
-  const [selectedIndex, selectEntry] = useState(0);
-  const getSelectedEntry = () => entries[selectedIndex]
-  useDocumentKeydown(({key}) => {
-    if (key === "ArrowUp") shiftSelection(-1);
-    else if (key === "ArrowDown") shiftSelection(1);
-    else if (key === "Enter") submitSelection()
-  })
-  function shiftSelection(offset) {
-    const index = selectedIndex + offset
-    if (- 1 < index < entries.length) selectEntry(index)
-  }
-  function submitSelection() {
-    const selectedEntry = getSelectedEntry()
-    onSelectAction(selectedEntry.extensionId, selectedEntry.action)
-  }
-  return (
-    <div>
-      <ul className="list-style-type-none">
-        {entries.map((entry, index) => {
-          return (
-            <SearchResultEntry
-              key={entry.key}
-              title={entry.title}
-              highlighted={entry.key === getSelectedEntry().key}
-              onMouseEnter={() => selectEntry(index)}
-              onClick={submitSelection}
-            />
-          );
-        })}
-      </ul>
-    </div>
-  );
 }
 
 const app = document.createElement("div");
