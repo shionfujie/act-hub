@@ -17,7 +17,7 @@ export default function SearchModal({
     chrome.storage.sync.get({actionSpecs: []}, ({actionSpecs}) => 
       setEntries(
         actionSpecs.flatMap(extensionSpecToEntries)
-          .filter(({title}) => containsSparsely(title, q))
+          .filter(({title}) => containsSparsely(Array.from(title), Array.from(q)))
       )
     )
   }, [q])
@@ -49,7 +49,7 @@ function containsSparsely(array, array1) {
   else if (array.length === 0) return false
   else {
     const [a1, ...rest1] = array1
-    const index = array.indexOf(a1)
+    const index = array.findIndex(a => 0 === a.localeCompare(a1, 'en', { sensitivity: 'base' }))
     if (index < 0) return false
     else return containsSparsely(array.slice(index + 1), rest1)
   }
