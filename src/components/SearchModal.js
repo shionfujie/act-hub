@@ -24,11 +24,10 @@ export default function SearchModal({
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
-        <SearchInput onChange={setQuery}/>
-        <SearchResult
-          entries={entries}
-          onSelectAction={onSelectAction}
-        />
+        <SearchInput onChange={setQuery} />
+        {entries.length > 0 && (
+          <SearchResult entries={entries} onSelectAction={onSelectAction} />
+        )}
       </div>
     </Modal>
   );
