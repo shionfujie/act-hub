@@ -1,7 +1,7 @@
 import React from "react";
 import useFocusCallback from "../hooks/useFocusCallback";
 
-export default function SearchInput() {
+export default function SearchInput({onChange}) {
   const focusCallback = useFocusCallback();
   return (
     <div
@@ -29,6 +29,7 @@ export default function SearchInput() {
         <input
           type="text"
           className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis no-border no-outline no-box-shadow full-width background-none"
+          onChange={({target}) => onChange(target.value)}
           ref={focusCallback}
         />
       </div>

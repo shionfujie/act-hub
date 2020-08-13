@@ -9,7 +9,9 @@ export default function SearchModal({
   onRequestClose,
   onSelectAction
 }) {
+  const [q, setQuery] = useState("")
   const [entries, setEntries] = useState([])
+  console.debug(q)
   console.debug(entries)
   useEffect(() => {
     chrome.storage.sync.get({actionSpecs: []}, ({actionSpecs}) => 
@@ -18,7 +20,7 @@ export default function SearchModal({
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
-        <SearchInput />
+        <SearchInput onChange={setQuery}/>
         <SearchResult
           entries={entries}
           onSelectAction={onSelectAction}
