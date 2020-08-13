@@ -15,8 +15,12 @@ export default function SearchModal({
   console.debug(entries)
   useEffect(() => {
     chrome.storage.sync.get({actionSpecs: []}, ({actionSpecs}) => 
-      setEntries(actionSpecs.flatMap(extensionSpecToEntries)))
-  }, [])
+      setEntries(
+        actionSpecs.flatMap(extensionSpecToEntries)
+          .filter(({title}) => containsSparsely(title, q))
+      )
+    )
+  }, [q])
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
@@ -39,6 +43,17 @@ function extensionSpecToEntries({ id, name, actions }) {
       action
     };
   });
+}
+
+function containsSparsely(array, array1) {
+  if (array1.length === 0) return true
+  else if (array.length === 0) return false
+  else {
+    const [a1, ...rest1] = array1
+    const index = array.indexOf(a1)
+    if (index < 0) return false
+    else return containsSparsely(array.slice(index + 1), rest1)
+  }
 }
 
 function Modal({ isOpen, onRequestClose, children }) {
