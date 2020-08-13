@@ -9,20 +9,25 @@ export default function SearchModal({
   onRequestClose,
   onSelectAction
 }) {
+  const [q, setQuery] = useState("")
   const [entries, setEntries] = useState([])
+  console.debug(q)
   console.debug(entries)
   useEffect(() => {
     chrome.storage.sync.get({actionSpecs: []}, ({actionSpecs}) => 
-      setEntries(actionSpecs.flatMap(extensionSpecToEntries)))
-  }, [])
+      setEntries(
+        actionSpecs.flatMap(extensionSpecToEntries)
+          .filter(({title}) => containsSparsely(Array.from(title), Array.from(q)))
+      )
+    )
+  }, [q])
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
-        <SearchInput />
-        <SearchResult
-          entries={entries}
-          onSelectAction={onSelectAction}
-        />
+        <SearchInput onChange={setQuery} />
+        {entries.length > 0 && (
+          <SearchResult entries={entries} onSelectAction={onSelectAction} />
+        )}
       </div>
     </Modal>
   );
@@ -37,6 +42,17 @@ function extensionSpecToEntries({ id, name, actions }) {
       action
     };
   });
+}
+
+function containsSparsely(array, array1) {
+  if (array1.length === 0) return true
+  else if (array.length === 0) return false
+  else {
+    const [a1, ...rest1] = array1
+    const index = array.findIndex(a => 0 === a.localeCompare(a1, 'en', { sensitivity: 'base' }))
+    if (index < 0) return false
+    else return containsSparsely(array.slice(index + 1), rest1)
+  }
 }
 
 function Modal({ isOpen, onRequestClose, children }) {
