@@ -10,18 +10,7 @@ export default function SearchModal({
   onRequestClose,
   onSelectAction
 }) {
-  const [q, setQuery] = useState("")
-  const [entries, setEntries] = useState([])
-  console.debug(q)
-  console.debug(entries)
-  useEffect(() => {
-    chrome.storage.sync.get({actionSpecs: []}, ({actionSpecs}) => 
-      setEntries(
-        actionSpecs.flatMap(extensionSpecToEntries)
-          .filter(({title}) => containsSparsely(Array.from(title), Array.from(q)))
-      )
-    )
-  }, [q])
+  const [entries, setQuery] = useEntries()
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
@@ -32,6 +21,20 @@ export default function SearchModal({
       </div>
     </Modal>
   );
+}
+
+function useEntries() {
+  const [q, setQuery] = useState("")
+  const [entries, setEntries] = useState([])
+  useEffect(() => {
+    chrome.storage.sync.get({actionSpecs: []}, ({actionSpecs}) => 
+      setEntries(
+        actionSpecs.flatMap(extensionSpecToEntries)
+          .filter(({title}) => containsSparsely(Array.from(title), Array.from(q)))
+      )
+    )
+  }, [q])
+  return [entries, setQuery]
 }
 
 function extensionSpecToEntries({ id, name, actions }) {
