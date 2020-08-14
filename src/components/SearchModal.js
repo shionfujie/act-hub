@@ -3,7 +3,7 @@ import React, {useState, useEffect} from "react";
 import ReactModal from "react-modal";
 import SearchResult from "./SearchResult";
 import SearchInput from "./SearchInput";
-import compareCaseInsensitively from "../util/compareCaseInsensitively"
+import containsSparsely from "../util/containsSparsely";
 
 export default function SearchModal({
   isOpen,
@@ -43,17 +43,6 @@ function extensionSpecToEntries({ id, name, actions }) {
       action
     };
   });
-}
-
-function containsSparsely(array, array1) {
-  if (array1.length === 0) return true
-  else if (array.length === 0) return false
-  else {
-    const [a1, ...rest1] = array1
-    const index = array.findIndex(a => compareCaseInsensitively(a, a1))
-    if (index < 0) return false
-    else return containsSparsely(array.slice(index + 1), rest1)
-  }
 }
 
 function Modal({ isOpen, onRequestClose, children }) {
