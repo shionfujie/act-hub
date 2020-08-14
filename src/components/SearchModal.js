@@ -30,12 +30,14 @@ function useEntries() {
     chrome.storage.sync.get({actionSpecs: []}, ({actionSpecs}) => 
       setEntries(
         actionSpecs.flatMap(extensionSpecToEntries)
-          .filter(({title}) => containsSparsely(Array.from(title), Array.from(q)))
+          .filter(matchQuery(q))
       )
     )
   }, [q])
   return [entries, setQuery]
 }
+
+const matchQuery = q => entry => containsSparsely(Array.from(entry.title), Array.from(q))
 
 function extensionSpecToEntries({ id, name, actions }) {
   return actions.map((action, index) => {
