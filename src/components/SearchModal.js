@@ -49,10 +49,14 @@ function containsSparsely(array, array1) {
   else if (array.length === 0) return false
   else {
     const [a1, ...rest1] = array1
-    const index = array.findIndex(a => 0 === a.localeCompare(a1, 'en', { sensitivity: 'base' }))
+    const index = array.findIndex(a => compareCaseInsensitively(a, a1))
     if (index < 0) return false
     else return containsSparsely(array.slice(index + 1), rest1)
   }
+}
+
+function compareCaseInsensitively(string, string1) {
+  return 0 === string.localeCompare(string1, 'en', { sensitivity: 'base' })
 }
 
 function Modal({ isOpen, onRequestClose, children }) {
