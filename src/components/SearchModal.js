@@ -3,24 +3,14 @@ import React, {useState, useEffect} from "react";
 import ReactModal from "react-modal";
 import SearchResult from "./SearchResult";
 import SearchInput from "./SearchInput";
+import containsSparsely from "../util/containsSparsely";
 
 export default function SearchModal({
   isOpen,
   onRequestClose,
   onSelectAction
 }) {
-  const [q, setQuery] = useState("")
-  const [entries, setEntries] = useState([])
-  console.debug(q)
-  console.debug(entries)
-  useEffect(() => {
-    chrome.storage.sync.get({actionSpecs: []}, ({actionSpecs}) => 
-      setEntries(
-        actionSpecs.flatMap(extensionSpecToEntries)
-          .filter(({title}) => containsSparsely(Array.from(title), Array.from(q)))
-      )
-    )
-  }, [q])
+  const [entries, setQuery] = useEntries()
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
@@ -33,6 +23,22 @@ export default function SearchModal({
   );
 }
 
+function useEntries() {
+  const [q, setQuery] = useState("")
+  const [entries, setEntries] = useState([])
+  useEffect(() => {
+    chrome.storage.sync.get({actionSpecs: []}, ({actionSpecs}) => 
+      setEntries(
+        actionSpecs.flatMap(extensionSpecToEntries)
+          .filter(matchQuery(q))
+      )
+    )
+  }, [q])
+  return [entries, setQuery]
+}
+
+const matchQuery = q => entry => containsSparsely(Array.from(entry.title), Array.from(q))
+
 function extensionSpecToEntries({ id, name, actions }) {
   return actions.map((action, index) => {
     return {
@@ -42,17 +48,6 @@ function extensionSpecToEntries({ id, name, actions }) {
       action
     };
   });
-}
-
-function containsSparsely(array, array1) {
-  if (array1.length === 0) return true
-  else if (array.length === 0) return false
-  else {
-    const [a1, ...rest1] = array1
-    const index = array.findIndex(a => 0 === a.localeCompare(a1, 'en', { sensitivity: 'base' }))
-    if (index < 0) return false
-    else return containsSparsely(array.slice(index + 1), rest1)
-  }
 }
 
 function Modal({ isOpen, onRequestClose, children }) {
