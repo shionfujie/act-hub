@@ -3,6 +3,7 @@ import React, {useState, useEffect} from "react";
 import ReactModal from "react-modal";
 import SearchResult from "./SearchResult";
 import SearchInput from "./SearchInput";
+import compareCaseInsensitively from "../util/compareCaseInsensitively"
 
 export default function SearchModal({
   isOpen,
@@ -53,10 +54,6 @@ function containsSparsely(array, array1) {
     if (index < 0) return false
     else return containsSparsely(array.slice(index + 1), rest1)
   }
-}
-
-function compareCaseInsensitively(string, string1) {
-  return 0 === string.localeCompare(string1, 'en', { sensitivity: 'base' })
 }
 
 function Modal({ isOpen, onRequestClose, children }) {
