@@ -6,7 +6,7 @@ chrome.management.onInstalled.addListener(({id}) => {
 
 function storeActionSpec(thisSpec) {
   // TODO: Type-check incoming spec!
-  chrome.storage.sync.get({actionSpecs: []}, ({actionSpecs}) => {
+  getActionSpecs(actionSpecs => {
     console.debug("---begin storeActionSpec---")
     console.debug(actionSpecs)
     const index = actionSpecs.findIndex(thatSpec => thisSpec.id === thatSpec.id)
@@ -14,9 +14,13 @@ function storeActionSpec(thisSpec) {
       actionSpecs[index] = thisSpec
     else
       actionSpecs.unshift(thisSpec)
-    chrome.storage.sync.set({actionSpecs: actionSpecs})
+      chrome.storage.sync.set({actionSpecs: actionSpecs})
     console.debug("---end storeActionSpec---")
   })
+}
+
+function getActionSpecs(callback) {
+  chrome.storage.sync.get({actionSpecs: []}, ({actionSpecs}) => callback(actionSpecs))
 }
 
 chrome.runtime.onConnect.addListener(({ name, onMessage }) => {
