@@ -14,13 +14,17 @@ function storeActionSpec(thisSpec) {
       actionSpecs[index] = thisSpec
     else
       actionSpecs.unshift(thisSpec)
-      chrome.storage.sync.set({actionSpecs: actionSpecs})
+    saveActionSpecs(actionSpecs)
     console.debug("---end storeActionSpec---")
   })
 }
 
 function getActionSpecs(callback) {
   chrome.storage.sync.get({actionSpecs: []}, ({actionSpecs}) => callback(actionSpecs))
+}
+
+function saveActionSpecs(actionSpecs) {
+  chrome.storage.sync.set({actionSpecs})
 }
 
 chrome.runtime.onConnect.addListener(({ name, onMessage }) => {
