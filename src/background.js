@@ -19,6 +19,15 @@ function storeActionSpec(thisSpec) {
   })
 }
 
+chrome.runtime.onInstalled.addListener(() => {
+  getActionSpecs(actionSpecs => {
+    const validSpecs = actionSpecs.filter(({id, name, actions}) => 
+      id !== undefined && name !== undefined && actions !== undefined)
+    console.debug(validSpecs)
+    saveActionSpecs(validSpecs)
+  })
+})
+
 function getActionSpecs(callback) {
   chrome.storage.sync.get({actionSpecs: []}, ({actionSpecs}) => callback(actionSpecs))
 }
