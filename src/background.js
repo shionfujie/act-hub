@@ -5,6 +5,7 @@ chrome.management.onInstalled.addListener(({id}) => {
 })
 
 function storeActionSpec(thisSpec) {
+  if (!thisSpec) return
   // TODO: Type-check incoming spec!
   getActionSpecs(actionSpecs => {
     console.debug("---begin storeActionSpec---")
