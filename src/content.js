@@ -1,5 +1,5 @@
 /* global chrome */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import "./css/content.css";
 import useSwitch from "./hooks/useSwitch";
@@ -9,9 +9,18 @@ import ReactModal from "react-modal";
 import useFocusCallback from "./hooks/useFocusCallback";
 
 function Main() {
+  const shortcut = useShortcut();
   const [modalIsOpen, openModal, closeModal] = useSwitch();
-  useDocumentKeydown(({ key, shiftKey, metaKey }) => {
-    if (key == "p" && shiftKey && metaKey) openModal();
+  useDocumentKeydown(event => {
+    if (shortcut === null) return;
+    if (
+      shortcut.shiftKey == event.shiftKey &&
+      shortcut.ctrlKey == event.ctrlKey &&
+      shortcut.altKey == event.altKey &&
+      shortcut.metaKey == event.metaKey &&
+      shortcut.code == event.code
+    )
+      openModal();
   });
   return (
     <KeyBindingModal
@@ -32,6 +41,24 @@ function Main() {
     // />
   );
 }
+
+function useShortcut() {
+  const [shortcut, setShortcut] = useState(null);
+  useEffect(() => {
+    chrome.storage.sync.get({ shortcut: DEFAULT_SHORTCUT }, ({ shortcut }) =>
+      setShortcut(shortcut)
+    );
+  }, []);
+  return shortcut;
+}
+
+const DEFAULT_SHORTCUT = {
+  shiftKey: true,
+  ctrlKey: false,
+  altKey: false,
+  metaKey: true,
+  code: "KeyP"
+};
 
 function KeyBindingModal({ isOpen, onRequestClose, onConfirmed }) {
   return (
