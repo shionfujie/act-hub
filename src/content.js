@@ -14,7 +14,14 @@ function Main() {
     if (key == "p" && shiftKey && metaKey) openModal();
   });
   return (
-    <KeyBindingModal isOpen={modalIsOpen} onRequestClose={closeModal} />
+    <KeyBindingModal
+      isOpen={modalIsOpen}
+      onRequestClose={closeModal}
+      onConfirmed={keyCombination => {
+        closeModal();
+        chrome.storage.sync.set({ shortcut: keyCombination });
+      }}
+    />
     // <SearchModal
     //   isOpen={modalIsOpen}
     //   onRequestClose={closeModal}
@@ -26,7 +33,7 @@ function Main() {
   );
 }
 
-function KeyBindingModal({ isOpen, onRequestClose }) {
+function KeyBindingModal({ isOpen, onRequestClose, onConfirmed }) {
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <div class="border-color-shade-013 flexbox flexbox-direction-column flexbox-grow-1 radius-tiny border-width-normal border-solid border-color-shade padding-bottom-tiny">
@@ -34,7 +41,7 @@ function KeyBindingModal({ isOpen, onRequestClose }) {
           Press key combination and then confirm ENTER.
         </div>
         <div class="flexbox flexbox-direction-column margin-smaller">
-          <KeyBindingInput />
+          <KeyBindingInput onConfirmed={onConfirmed} />
         </div>
       </div>
     </Modal>
@@ -54,11 +61,9 @@ function combineFuns(...funs) {
   };
 }
 
-function KeyBindingInput() {
+function KeyBindingInput({ onConfirmed }) {
   const focusCallback = useFocusCallback();
-  const [preview, onKeydown] = useKeyCombination(combination => {
-    console.debug(combination)
-  });
+  const [preview, onKeydown] = useKeyCombination(onConfirmed);
   return (
     <input
       ref={combineFuns(onKeydown, focusCallback)}
@@ -74,8 +79,8 @@ function useKeyCombination(onConfirmed) {
   const onKeydown = useOnKeyDown(event => {
     event.preventDefault();
     const { shiftKey, ctrlKey, altKey, metaKey, code } = event;
-    if (code === "Enter" && acceptableKeys[combination.code] !== undefined) 
-      onConfirmed(combination)
+    if (code === "Enter" && acceptableKeys[combination.code] !== undefined)
+      onConfirmed(combination);
     else setCombination({ shiftKey, ctrlKey, altKey, metaKey, code });
   });
   return [preview(combination), onKeydown];
@@ -89,7 +94,7 @@ function preview({ shiftKey, ctrlKey, altKey, metaKey, code }) {
   if (altKey) preview += "⌥";
   if (metaKey) preview += "⌘";
   if (keyPreview !== undefined) preview += keyPreview;
-  return preview
+  return preview;
 }
 
 const acceptableKeys = {
