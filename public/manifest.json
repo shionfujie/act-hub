@@ -1,6 +1,6 @@
 {
   "name": "ActHub",
-  "description": "Hub for all chrome actions",
+  "description": "A single hub for all actions",
   "version": "0.0.21",
   "manifest_version": 2,
   "icons": {
