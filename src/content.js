@@ -56,6 +56,18 @@ function combineFuns(...funs) {
 
 function KeyBindingInput() {
   const focusCallback = useFocusCallback()
+  const [preview, onKeydown] = usePreview()
+  return (
+    <input
+      ref={combineFuns(onKeydown, focusCallback)}
+      class="caret-087 border-width-thick no-outline border-solid border-primary radius-small font-size-small font-weight-medium line-height-medium shade-087 text-center padding-tiny"
+      id="previewer"
+      value={preview}
+    />
+  );
+}
+
+function usePreview() {
   const [preview, setPreview] = useState("") 
   const onKeydown = useOnKeyDown(event => {
     event.preventDefault()
@@ -69,14 +81,7 @@ function KeyBindingInput() {
     if (keyPreview !== undefined) preview += keyPreview
     setPreview(preview)
   })
-  return (
-    <input
-      ref={combineFuns(onKeydown, focusCallback)}
-      class="caret-087 border-width-thick no-outline border-solid border-primary radius-small font-size-small font-weight-medium line-height-medium shade-087 text-center padding-tiny"
-      id="previewer"
-      value={preview}
-    />
-  );
+  return [preview, onKeydown]
 }
 
 const acceptableKeys = {
