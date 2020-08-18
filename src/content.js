@@ -56,7 +56,7 @@ function combineFuns(...funs) {
 
 function KeyBindingInput() {
   const focusCallback = useFocusCallback();
-  const [keyCombination, onKeydown] = useKeyCombination(combination => {
+  const [preview, onKeydown] = useKeyCombination(combination => {
     console.debug(combination)
   });
   return (
@@ -64,7 +64,7 @@ function KeyBindingInput() {
       ref={combineFuns(onKeydown, focusCallback)}
       class="caret-087 border-width-thick no-outline border-solid border-primary radius-small font-size-small font-weight-medium line-height-medium shade-087 text-center padding-tiny"
       id="previewer"
-      value={preview(keyCombination)}
+      value={preview}
     />
   );
 }
@@ -78,7 +78,7 @@ function useKeyCombination(onConfirmed) {
       onConfirmed(combination)
     else setCombination({ shiftKey, ctrlKey, altKey, metaKey, code });
   });
-  return [combination, onKeydown];
+  return [preview(combination), onKeydown];
 }
 
 function preview({ shiftKey, ctrlKey, altKey, metaKey, code }) {
