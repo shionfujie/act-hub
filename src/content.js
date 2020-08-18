@@ -33,10 +33,7 @@ function KeyBindingModal({ isOpen, onRequestClose }) {
           Press key combination and then confirm ENTER.
         </div>
         <div class="flexbox flexbox-direction-column margin-smaller">
-          <input
-            class="border-width-thick no-outline border-solid border-primary radius-small font-size-small font-weight-medium line-height-medium shade-087 text-center padding-tiny"
-            id="previewer"
-          />
+          <KeyBindingInput />
         </div>
       </div>
     </Modal>
@@ -44,7 +41,12 @@ function KeyBindingModal({ isOpen, onRequestClose }) {
 }
 
 function KeyBindingInput() {
-  return <div></div>;
+  return (
+    <input
+      class="border-width-thick no-outline border-solid border-primary radius-small font-size-small font-weight-medium line-height-medium shade-087 text-center padding-tiny"
+      id="previewer"
+    />
+  );
 }
 
 function Modal({ isOpen, onRequestClose, children }) {
