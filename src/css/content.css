@@ -89,6 +89,9 @@
     border-color: rgb(26, 115, 232);
 }
 
+.caret-087{
+    caret-color: #222 !important;
+}
 
 .margin-smaller {
     margin: 8px;

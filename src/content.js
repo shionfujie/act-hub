@@ -72,7 +72,7 @@ function KeyBindingInput() {
   return (
     <input
       ref={combineFuns(onKeydown, focusCallback)}
-      class="border-width-thick no-outline border-solid border-primary radius-small font-size-small font-weight-medium line-height-medium shade-087 text-center padding-tiny"
+      class="caret-087 border-width-thick no-outline border-solid border-primary radius-small font-size-small font-weight-medium line-height-medium shade-087 text-center padding-tiny"
       id="previewer"
       value={preview}
     />
