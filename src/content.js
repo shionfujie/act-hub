@@ -1,5 +1,5 @@
 /* global chrome */
-import React from "react";
+import React, {useState} from "react";
 import ReactDOM from "react-dom";
 import "./css/content.css";
 import useSwitch from "./hooks/useSwitch";
@@ -48,16 +48,90 @@ function useOnKeyDown(onkeydown) {
 }
 
 function KeyBindingInput() {
-  const onKeydown = useOnKeyDown(() => {
-    console.debug('onkeydown')
+  const [preview, setPreview] = useState("") 
+  const onKeydown = useOnKeyDown(event => {
+    event.preventDefault()
+    const {shiftKey, ctrlKey, altKey, metaKey, code} = event
+    var preview = ""
+    const keyPreview = acceptableKeys[code]
+    if (ctrlKey) preview += "⌃"
+    if (shiftKey) preview += "⇧"
+    if (altKey) preview += "⌥"
+    if (metaKey) preview += "⌘"
+    if (keyPreview !== undefined) preview += keyPreview
+    setPreview(preview)
   })
   return (
     <input
       ref={onKeydown}
       class="border-width-thick no-outline border-solid border-primary radius-small font-size-small font-weight-medium line-height-medium shade-087 text-center padding-tiny"
       id="previewer"
+      value={preview}
     />
   );
+}
+
+const acceptableKeys = {
+  "KeyA": "A",
+  "KeyB": "B",
+  "KeyC": "C",
+  "KeyD": "D",
+  "KeyE": "E",
+  "KeyF": "F",
+  "KeyG": "G",
+  "KeyH": "H",
+  "KeyI": "I",
+  "KeyJ": "J",
+  "KeyK": "K",
+  "KeyL": "L",
+  "KeyM": "M",
+  "KeyN": "N",
+  "KeyO": "O",
+  "KeyP": "P",
+  "KeyQ": "Q",
+  "KeyR": "R",
+  "KeyS": "S",
+  "KeyT": "T",
+  "KeyU": "U",
+  "KeyV": "V",
+  "KeyW": "W",
+  "KeyX": "X",
+  "KeyY": "Y",
+  "KeyZ": "Z",
+  "Digit0": "0",
+  "Digit1": "1",
+  "Digit2": "2",
+  "Digit3": "3",
+  "Digit4": "4",
+  "Digit5": "5",
+  "Digit6": "6",
+  "Digit7": "7",
+  "Digit8": "8",
+  "Digit9": "9",
+  "Minus": "-",
+  "Equal": "=",
+  "BracketLeft": "[",
+  "BracketRight": "]",
+  "Semicolon": ";",
+  "Quote": "\"",
+  "Backslash": "\\",
+  "Slash": "/",
+  "F1": "F1",
+  "F2": "F2",
+  "F3": "F3",
+  "F4": "F4",
+  "F5": "F5",
+  "F6": "F6",
+  "F7": "F7",
+  "F8": "F8",
+  "F9": "F9",
+  "F10": "F10",
+  "F11": "F11",
+  "F12": "F12",
+  "ArrowLeft": "←",
+  "ArrowUp": "↑",
+  "ArrowRight": "→",
+  "ArrowDown": "↓",
 }
 
 function Modal({ isOpen, onRequestClose, children }) {
