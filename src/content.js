@@ -40,9 +40,20 @@ function KeyBindingModal({ isOpen, onRequestClose }) {
   );
 }
 
+function useOnKeyDown(onkeydown) {
+  return (inputEl) => {
+    if (inputEl === null) return
+    inputEl.onkeydown = onkeydown
+  }
+}
+
 function KeyBindingInput() {
+  const onKeydown = useOnKeyDown(() => {
+    console.debug('onkeydown')
+  })
   return (
     <input
+      ref={onKeydown}
       class="border-width-thick no-outline border-solid border-primary radius-small font-size-small font-weight-medium line-height-medium shade-087 text-center padding-tiny"
       id="previewer"
     />
