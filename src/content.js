@@ -6,6 +6,7 @@ import useSwitch from "./hooks/useSwitch";
 import useDocumentKeydown from "./hooks/useDocumentKeydown";
 import SearchModal from "./components/SearchModal";
 import ReactModal from "react-modal";
+import useFocusCallback from "./hooks/useFocusCallback";
 
 function Main() {
   const [modalIsOpen, openModal, closeModal] = useSwitch();
@@ -47,7 +48,14 @@ function useOnKeyDown(onkeydown) {
   }
 }
 
+function combineFuns(...funs) {
+  return (...args) => {
+    return funs.map(f => f(...args))
+  }
+}
+
 function KeyBindingInput() {
+  const focusCallback = useFocusCallback()
   const [preview, setPreview] = useState("") 
   const onKeydown = useOnKeyDown(event => {
     event.preventDefault()
@@ -63,7 +71,7 @@ function KeyBindingInput() {
   })
   return (
     <input
-      ref={onKeydown}
+      ref={combineFuns(onKeydown, focusCallback)}
       class="border-width-thick no-outline border-solid border-primary radius-small font-size-small font-weight-medium line-height-medium shade-087 text-center padding-tiny"
       id="previewer"
       value={preview}
