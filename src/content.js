@@ -56,7 +56,9 @@ function combineFuns(...funs) {
 
 function KeyBindingInput() {
   const focusCallback = useFocusCallback();
-  const [keyCombination, onKeydown] = useKeyCombination();
+  const [keyCombination, onKeydown] = useKeyCombination(combination => {
+    console.debug(combination)
+  });
   return (
     <input
       ref={combineFuns(onKeydown, focusCallback)}
@@ -67,12 +69,14 @@ function KeyBindingInput() {
   );
 }
 
-function useKeyCombination() {
+function useKeyCombination(onConfirmed) {
   const [combination, setCombination] = useState({});
   const onKeydown = useOnKeyDown(event => {
     event.preventDefault();
     const { shiftKey, ctrlKey, altKey, metaKey, code } = event;
-    setCombination({ shiftKey, ctrlKey, altKey, metaKey, code });
+    if (code === "Enter" && acceptableKeys[combination.code] !== undefined) 
+      onConfirmed(combination)
+    else setCombination({ shiftKey, ctrlKey, altKey, metaKey, code });
   });
   return [combination, onKeydown];
 }
