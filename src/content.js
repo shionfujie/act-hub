@@ -25,10 +25,20 @@ function Main() {
   );
 }
 
-function KeyBindingModal({isOpen, onRequestClose}) {
+function KeyBindingModal({ isOpen, onRequestClose }) {
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
-      <div>Test</div>
+      <div class="border-color-shade-013 flexbox flexbox-direction-column flexbox-grow-1 radius-tiny border-width-normal border-solid border-color-shade padding-bottom-tiny">
+        <div class="font-size-small font-weight-medium line-height-small shade-087 flexbox flexbox-centered margin-top-medium margin-horizontal-smaller padding-bottom-tiny">
+          Press key combination and then confirm ENTER.
+        </div>
+        <div class="flexbox flexbox-direction-column margin-smaller">
+          <input
+            class="border-width-thick no-outline border-solid border-primary radius-small font-size-small font-weight-medium line-height-medium shade-087 text-center padding-tiny"
+            id="previewer"
+          />
+        </div>
+      </div>
     </Modal>
   );
 }
