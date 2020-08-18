@@ -10,6 +10,7 @@ import useFocusCallback from "./hooks/useFocusCallback";
 
 function Main() {
   const shortcut = useShortcut();
+  console.debug(shortcut)
   const [modalIsOpen, openModal, closeModal] = useSwitch();
   useDocumentKeydown(event => {
     if (shortcut === null) return;
@@ -17,23 +18,28 @@ function Main() {
       openModal();
   });
   return (
-    <KeyBindingModal
+    <SearchModal
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
-      onConfirmed={keyCombination => {
+      onSelectAction={(id, action) => {
         closeModal();
-        chrome.storage.sync.set({ shortcut: keyCombination });
+        if (id === "internal") executeInternalAction(action)
+        else chrome.runtime.sendMessage(id, { type: "execute action", action });
       }}
     />
-    // <SearchModal
+    // <KeyBindingModal
     //   isOpen={modalIsOpen}
     //   onRequestClose={closeModal}
-    //   onSelectAction={(id, action) => {
+    //   onConfirmed={keyCombination => {
     //     closeModal();
-    //     chrome.runtime.sendMessage(id, { type: "execute action", action });
+    //     chrome.storage.sync.set({ shortcut: keyCombination });
     //   }}
     // />
   );
+}
+
+function executeInternalAction(action) {
+  console.debug(action)
 }
 
 function confirmShortcut(shortcut, {shiftKey, ctrlKey, altKey, metaKey, code}) {
