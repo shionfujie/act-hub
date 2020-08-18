@@ -13,13 +13,7 @@ function Main() {
   const [modalIsOpen, openModal, closeModal] = useSwitch();
   useDocumentKeydown(event => {
     if (shortcut === null) return;
-    if (
-      shortcut.shiftKey == event.shiftKey &&
-      shortcut.ctrlKey == event.ctrlKey &&
-      shortcut.altKey == event.altKey &&
-      shortcut.metaKey == event.metaKey &&
-      shortcut.code == event.code
-    )
+    if (confirmShortcut(shortcut, event))
       openModal();
   });
   return (
@@ -40,6 +34,14 @@ function Main() {
     //   }}
     // />
   );
+}
+
+function confirmShortcut(shortcut, {shiftKey, ctrlKey, altKey, metaKey, code}) {
+  return shortcut.shiftKey === shiftKey &&
+      shortcut.ctrlKey === ctrlKey &&
+      shortcut.altKey === altKey &&
+      shortcut.metaKey === metaKey &&
+      shortcut.code === code
 }
 
 function useShortcut() {
