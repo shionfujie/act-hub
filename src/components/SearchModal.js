@@ -28,7 +28,7 @@ const internalActions = [
     key: "internal-0",
     extensionId: "internal",
     title: "Preferences: Change Keybinding",
-    action: "keybinding"
+    action: {type: "keybinding"}
   }
 ];
 

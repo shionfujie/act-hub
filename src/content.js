@@ -10,44 +10,54 @@ import useFocusCallback from "./hooks/useFocusCallback";
 
 function Main() {
   const shortcut = useShortcut();
-  console.debug(shortcut)
   const [modalIsOpen, openModal, closeModal] = useSwitch();
+  const [keybindingModalIsOpen, openKeybinding, closeKeyBinding] = useSwitch()
   useDocumentKeydown(event => {
     if (shortcut === null) return;
-    if (confirmShortcut(shortcut, event))
-      openModal();
+    if (confirmShortcut(shortcut, event)) openModal();
   });
+  function executeInternalAction(action) {
+    switch (action.type) {
+      case "keybinding":
+        openKeybinding()
+        break;
+    }
+  }
   return (
-    <SearchModal
-      isOpen={modalIsOpen}
-      onRequestClose={closeModal}
-      onSelectAction={(id, action) => {
-        closeModal();
-        if (id === "internal") executeInternalAction(action)
-        else chrome.runtime.sendMessage(id, { type: "execute action", action });
-      }}
-    />
-    // <KeyBindingModal
-    //   isOpen={modalIsOpen}
-    //   onRequestClose={closeModal}
-    //   onConfirmed={keyCombination => {
-    //     closeModal();
-    //     chrome.storage.sync.set({ shortcut: keyCombination });
-    //   }}
-    // />
+    <>
+      <SearchModal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        onSelectAction={(id, action) => {
+          closeModal();
+          if (id === "internal") executeInternalAction(action);
+          else
+            chrome.runtime.sendMessage(id, { type: "execute action", action });
+        }}
+      />
+      <KeyBindingModal
+        isOpen={keybindingModalIsOpen}
+        onRequestClose={closeKeyBinding}
+        onConfirmed={keyCombination => {
+          closeModal();
+          chrome.storage.sync.set({ shortcut: keyCombination });
+        }}
+      />
+    </>
   );
 }
 
-function executeInternalAction(action) {
-  console.debug(action)
-}
-
-function confirmShortcut(shortcut, {shiftKey, ctrlKey, altKey, metaKey, code}) {
-  return shortcut.shiftKey === shiftKey &&
-      shortcut.ctrlKey === ctrlKey &&
-      shortcut.altKey === altKey &&
-      shortcut.metaKey === metaKey &&
-      shortcut.code === code
+function confirmShortcut(
+  shortcut,
+  { shiftKey, ctrlKey, altKey, metaKey, code }
+) {
+  return (
+    shortcut.shiftKey === shiftKey &&
+    shortcut.ctrlKey === ctrlKey &&
+    shortcut.altKey === altKey &&
+    shortcut.metaKey === metaKey &&
+    shortcut.code === code
+  );
 }
 
 function useShortcut() {
