@@ -1,5 +1,5 @@
 /*global chrome*/
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import ReactModal from "react-modal";
 import SearchResult from "./SearchResult";
 import SearchInput from "./SearchInput";
@@ -10,7 +10,7 @@ export default function SearchModal({
   onRequestClose,
   onSelectAction
 }) {
-  const [entries, setQuery] = useEntries()
+  const [entries, setQuery] = useEntries();
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
@@ -23,21 +23,33 @@ export default function SearchModal({
   );
 }
 
+const internalActions = [
+  {
+    key: "internal-0",
+    extensionId: "internal",
+    title: "Preferences: Change Keybinding",
+    action: {type: "keybinding"}
+  }
+];
+
 function useEntries() {
-  const [q, setQuery] = useState("")
-  const [entries, setEntries] = useState([])
+  const [q, setQuery] = useState("");
+  const [entries, setEntries] = useState([]);
   useEffect(() => {
-    chrome.storage.sync.get({actionSpecs: []}, ({actionSpecs}) => 
+    chrome.storage.sync.get({ actionSpecs: [] }, ({ actionSpecs }) =>
       setEntries(
-        actionSpecs.flatMap(extensionSpecToEntries)
-          .filter(matchQuery(q))
+        [
+          ...internalActions,
+          ...actionSpecs.flatMap(extensionSpecToEntries)
+        ].filter(matchQuery(q))
       )
-    )
-  }, [q])
-  return [entries, setQuery]
+    );
+  }, [q]);
+  return [entries, setQuery];
 }
 
-const matchQuery = q => entry => containsSparsely(Array.from(entry.title), Array.from(q))
+const matchQuery = q => entry =>
+  containsSparsely(Array.from(entry.title), Array.from(q));
 
 function extensionSpecToEntries({ id, name, actions }) {
   return actions.map((action, index) => {

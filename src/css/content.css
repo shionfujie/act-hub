@@ -1,6 +1,7 @@
-#act-hub-extension-root, #act-hub-modal-root {
+#act-hub-extension-root,
+#act-hub-modal-root {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica,
-    Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+        Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
     padding: 0;
     margin: 0;
     -webkit-font-smoothing: antialiased;
@@ -18,10 +19,18 @@
 #act-hub-modal-root ul {
     padding: 0;
     margin: 0;
-} 
+}
+
+.font-size-small {
+    font-size: 14px;
+}
 
 .font-size-medium {
     font-size: 16px !important;
+}
+
+.line-height-small {
+    line-height: 18px;
 }
 
 .line-height-medium {
@@ -43,7 +52,7 @@
 .shade-primary {
     color: #1a73e8
 }
- 
+
 .background-shade-003 {
     background: #f7f7f7;
 }
@@ -53,7 +62,7 @@
 }
 
 .background-selected {
-    background: rgba(66,133,244,0.12);
+    background: rgba(66, 133, 244, 0.12);
 }
 
 .background-hover-shade-003:hover {
@@ -74,6 +83,31 @@
 
 .border-color-shade-013 {
     border-color: #dddddd;
+}
+
+.border-primary {
+    border-color: rgb(26, 115, 232);
+}
+
+.caret-087{
+    caret-color: #222 !important;
+}
+
+.margin-smaller {
+    margin: 8px;
+}
+
+.margin-horizontal-smaller {
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.margin-top-medium {
+    margin-top: 16px;
+}
+
+.padding-tiny {
+    padding: 4px;
 }
 
 .padding-horizontal-larger {
@@ -105,6 +139,10 @@
     padding-top: 20vh;
 }
 
+.padding-bottom-tiny {
+    padding-bottom: 4px;
+}
+
 .padding-bottom-smaller {
     padding-bottom: 8px
 }
@@ -131,7 +169,8 @@
 }
 
 .z-12 {
-    z-index: 12;;
+    z-index: 12;
+    ;
 }
 
 .block {
@@ -152,6 +191,10 @@
 
 .flexbox-align-start {
     align-items: flex-start;
+}
+
+.text-center {
+    text-align: center;
 }
 
 .flexbox-centered {
@@ -175,6 +218,10 @@
     box-shadow: rgba(29, 17, 17, 0.15) 0px 5px 12px;
 }
 
+.radius-tiny {
+    border-radius: 2px;
+}
+
 .radius-small {
     border-radius: 4px;
 }
@@ -185,6 +232,10 @@
 
 .border-width-normal {
     border-width: 1px;
+}
+
+.border-width-thick {
+    border-width: 2px;
 }
 
 .no-border {
