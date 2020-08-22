@@ -5,18 +5,50 @@ import SearchResult from "./SearchResult";
 import SearchInput from "./SearchInput";
 import containsSparsely from "../util/containsSparsely";
 
+function useOnKeyDown(onkeydown) {
+  return inputEl => {
+    if (inputEl === null) return;
+    inputEl.onkeydown = onkeydown;
+  };
+}
+
 export default function SearchModal({
   isOpen,
   onRequestClose,
   onSelectAction
 }) {
   const [entries, setQuery] = useEntries();
+  const [selectedIndex, selectEntry] = useState(0);
+  const elRef = useOnKeyDown(event => {
+    event.stopPropagation();
+    const key = event.key;
+    console.debug("elRef");
+    if (key === "ArrowUp") shiftSelection(-1);
+    else if (key === "ArrowDown") shiftSelection(1);
+    else if (key === "Enter") submitSelection();
+  });
+  function shiftSelection(offset) {
+    const index = selectedIndex + offset;
+    if (-1 < index && index < entries.length) selectEntry(index);
+  }
+  function submitSelection() {
+    const selectedEntry = entries[selectedIndex];
+    onSelectAction(selectedEntry.extensionId, selectedEntry.action);
+  }
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
-      <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
+      <div
+        ref={elRef}
+        className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden"
+      >
         <SearchInput onChange={setQuery} />
         {entries.length > 0 && (
-          <SearchResult entries={entries} onSelectAction={onSelectAction} />
+          <SearchResult
+            entries={entries}
+            selectedIndex={selectedIndex}
+            submitSelection={submitSelection}
+            selectEntry={selectEntry}
+          />
         )}
       </div>
     </Modal>
@@ -28,7 +60,7 @@ const internalActions = [
     key: "internal-0",
     extensionId: "internal",
     title: "Preferences: Change Keybinding",
-    action: {type: "keybinding"}
+    action: { type: "keybinding" }
   }
 ];
 
