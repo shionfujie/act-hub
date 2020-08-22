@@ -4,13 +4,7 @@ import ReactModal from "react-modal";
 import SearchResult from "./SearchResult";
 import SearchInput from "./SearchInput";
 import containsSparsely from "../util/containsSparsely";
-
-function useOnKeyDown(onkeydown) {
-  return inputEl => {
-    if (inputEl === null) return;
-    inputEl.onkeydown = onkeydown;
-  };
-}
+import useOnKeyDown from "../hooks/useOnKeyDown"
 
 export default function SearchModal({
   isOpen,

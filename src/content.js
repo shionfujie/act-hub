@@ -7,6 +7,7 @@ import useDocumentKeydown from "./hooks/useDocumentKeydown";
 import SearchModal from "./components/SearchModal";
 import ReactModal from "react-modal";
 import useFocusCallback from "./hooks/useFocusCallback";
+import useOnKeyDown from "./hooks/useOnKeyDown"
 
 function Main() {
   const shortcut = useShortcut();
@@ -91,13 +92,6 @@ function KeyBindingModal({ isOpen, onRequestClose, onConfirmed }) {
       </div>
     </Modal>
   );
-}
-
-function useOnKeyDown(onkeydown) {
-  return inputEl => {
-    if (inputEl === null) return;
-    inputEl.onkeydown = onkeydown;
-  };
 }
 
 function combineFuns(...funs) {
