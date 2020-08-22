@@ -29,7 +29,10 @@ export default function SearchInput({onChange}) {
         <input
           type="text"
           className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis no-border no-outline no-box-shadow full-width background-none"
-          onChange={({target}) => onChange(target.value)}
+          onChange={event => {
+            event.stopPropagation();
+            onChange(event.target.value);
+          }}
           ref={focusCallback}
         />
       </div>
