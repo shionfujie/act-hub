@@ -4,15 +4,14 @@ import ReactModal from "react-modal";
 import SearchResult from "./SearchResult";
 import SearchInput from "./SearchInput";
 import containsSparsely from "../util/containsSparsely";
-import useOnKeyDown from "../hooks/useOnKeyDown"
+import useOnKeyDown from "../hooks/useOnKeyDown";
 
 export default function SearchModal({
   isOpen,
   onRequestClose,
   onSelectAction
 }) {
-  const [entries, setQuery] = useEntries();
-  const [selectedIndex, selectEntry] = useState(0);
+  const [entries, selectedIndex, selectEntry, setQuery] = useEntries();
   const elRef = useOnKeyDown(event => {
     event.stopPropagation();
     const key = event.key;
@@ -61,17 +60,19 @@ const internalActions = [
 function useEntries() {
   const [q, setQuery] = useState("");
   const [entries, setEntries] = useState([]);
+  const [selectedIndex, selectEntry] = useState(0);
   useEffect(() => {
-    chrome.storage.sync.get({ actionSpecs: [] }, ({ actionSpecs }) =>
+    chrome.storage.sync.get({ actionSpecs: [] }, ({ actionSpecs }) => {
       setEntries(
         [
           ...internalActions,
           ...actionSpecs.flatMap(extensionSpecToEntries)
         ].filter(matchQuery(q))
-      )
-    );
+      );
+      selectEntry(0);
+    });
   }, [q]);
-  return [entries, setQuery];
+  return [entries, selectedIndex, selectEntry, setQuery];
 }
 
 const matchQuery = q => entry =>
