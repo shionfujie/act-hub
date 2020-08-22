@@ -1,23 +1,8 @@
-import React, { useState } from "react";
-import useDocumentKeydown from "../hooks/useDocumentKeydown";
+import React from "react";
 import SearchResultEntry from "./SearchResultEntry"
 
-export default function SearchResult({ onSelectAction, entries }) {
-  const [selectedIndex, selectEntry] = useState(0);
-  const getSelectedEntry = () => entries[selectedIndex];
-  useDocumentKeydown(({ key }) => {
-    if (key === "ArrowUp") shiftSelection(-1);
-    else if (key === "ArrowDown") shiftSelection(1);
-    else if (key === "Enter") submitSelection();
-  });
-  function shiftSelection(offset) {
-    const index = selectedIndex + offset;
-    if (-1 < index && index < entries.length) selectEntry(index);
-  }
-  function submitSelection() {
-    const selectedEntry = getSelectedEntry();
-    onSelectAction(selectedEntry.extensionId, selectedEntry.action);
-  }
+export default function SearchResult({ entries, selectedIndex, selectEntry, submitSelection }) {
+  console.debug(selectedIndex)
   return (
     <div>
       <ul className="list-style-type-none">
@@ -26,7 +11,7 @@ export default function SearchResult({ onSelectAction, entries }) {
             <SearchResultEntry
               key={entry.key}
               title={entry.title}
-              highlighted={entry.key === getSelectedEntry().key}
+              highlighted={index === selectedIndex}
               onMouseEnter={() => selectEntry(index)}
               onClick={submitSelection}
             />
