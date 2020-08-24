@@ -17,8 +17,9 @@ export default function SearchModal({
     selectEntry,
     shiftSelection,
     setQuery,
-    submitSelection
-  ] = useEntries(onSelectAction);
+    submitSelection,
+    onRequestClose$
+  ] = useEntries(onSelectAction, onRequestClose);
   const elRef = useOnKeyDown(event => {
     event.stopPropagation();
     const key = event.key;
@@ -27,7 +28,7 @@ export default function SearchModal({
     else if (key === "Enter") submitSelection();
   });
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
+    <Modal isOpen={isOpen} onRequestClose={onRequestClose$}>
       <div
         ref={elRef}
         className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden"
@@ -46,8 +47,9 @@ export default function SearchModal({
   );
 }
 
-function useEntries(onSelectAction) {
+function useEntries(onSelectAction, onRequestClose) {
   const [q, setQuery] = useState("");
+  console.debug(`'${q}'`)
   const [entries, setEntries] = useState([]);
   const [selectedIndex, selectEntry] = useState(0);
   useEffect(() => {
@@ -70,7 +72,11 @@ function useEntries(onSelectAction) {
     selectEntry,
     shiftSelection,
     setQuery,
-    submitSelection
+    submitSelection,
+    () => {
+      onRequestClose()
+      setQuery("")
+    }
   ];
 }
 
