@@ -60,13 +60,8 @@ function useEntries(onSelectAction) {
   const [entries, setEntries] = useState([]);
   const [selectedIndex, selectEntry] = useState(0);
   useEffect(() => {
-    chrome.storage.sync.get({ actionSpecs: [] }, ({ actionSpecs }) => {
-      setEntries(
-        [
-          ...internalActions,
-          ...actionSpecs.flatMap(extensionSpecToEntries)
-        ].filter(matchQuery(q))
-      );
+    getActionSpecs(actionSpecs => {
+      setEntries(constructEntries(actionSpecs, q));
       selectEntry(0);
     });
   }, [q]);
@@ -86,6 +81,17 @@ function useEntries(onSelectAction) {
     setQuery,
     submitSelection
   ];
+}
+
+function getActionSpecs(callback) {
+  chrome.storage.sync.get({ actionSpecs: [] }, ({ actionSpecs }) => callback(actionSpecs))
+}
+
+function constructEntries(actionSpecs, q) {
+  return [
+    ...internalActions,
+    ...actionSpecs.flatMap(extensionSpecToEntries)
+  ].filter(matchQuery(q))
 }
 
 const matchQuery = q => entry =>
