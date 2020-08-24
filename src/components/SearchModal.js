@@ -11,23 +11,21 @@ export default function SearchModal({
   onRequestClose,
   onSelectAction
 }) {
-  const [entries, selectedIndex, selectEntry, setQuery] = useEntries();
+  const [
+    entries,
+    selectedIndex,
+    selectEntry,
+    shiftSelection,
+    setQuery,
+    submitSelection
+  ] = useEntries(onSelectAction);
   const elRef = useOnKeyDown(event => {
     event.stopPropagation();
     const key = event.key;
-    console.debug("elRef");
     if (key === "ArrowUp") shiftSelection(-1);
     else if (key === "ArrowDown") shiftSelection(1);
     else if (key === "Enter") submitSelection();
   });
-  function shiftSelection(offset) {
-    const index = selectedIndex + offset;
-    if (-1 < index && index < entries.length) selectEntry(index);
-  }
-  function submitSelection() {
-    const selectedEntry = entries[selectedIndex];
-    onSelectAction(selectedEntry.extensionId, selectedEntry.action);
-  }
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <div
@@ -57,7 +55,7 @@ const internalActions = [
   }
 ];
 
-function useEntries() {
+function useEntries(onSelectAction) {
   const [q, setQuery] = useState("");
   const [entries, setEntries] = useState([]);
   const [selectedIndex, selectEntry] = useState(0);
@@ -72,7 +70,22 @@ function useEntries() {
       selectEntry(0);
     });
   }, [q]);
-  return [entries, selectedIndex, selectEntry, setQuery];
+  function shiftSelection(offset) {
+    const index = selectedIndex + offset;
+    if (-1 < index && index < entries.length) selectEntry(index);
+  }
+  function submitSelection() {
+    const selectedEntry = entries[selectedIndex];
+    onSelectAction(selectedEntry.extensionId, selectedEntry.action);
+  }
+  return [
+    entries,
+    selectedIndex,
+    selectEntry,
+    shiftSelection,
+    setQuery,
+    submitSelection
+  ];
 }
 
 const matchQuery = q => entry =>
