@@ -46,15 +46,6 @@ export default function SearchModal({
   );
 }
 
-const internalActions = [
-  {
-    key: "internal-0",
-    extensionId: "internal",
-    title: "Preferences: Change Keybinding",
-    action: { type: "keybinding" }
-  }
-];
-
 function useEntries(onSelectAction) {
   const [q, setQuery] = useState("");
   const [entries, setEntries] = useState([]);
@@ -86,6 +77,15 @@ function useEntries(onSelectAction) {
 function getActionSpecs(callback) {
   chrome.storage.sync.get({ actionSpecs: [] }, ({ actionSpecs }) => callback(actionSpecs))
 }
+
+const internalActions = [
+  {
+    key: "internal-0",
+    extensionId: "internal",
+    title: "Preferences: Change Keybinding",
+    action: { type: "keybinding" }
+  }
+];
 
 function constructEntries(actionSpecs, q) {
   return [
