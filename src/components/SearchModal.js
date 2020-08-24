@@ -11,23 +11,21 @@ export default function SearchModal({
   onRequestClose,
   onSelectAction
 }) {
-  const [entries, selectedIndex, selectEntry, setQuery] = useEntries();
+  const [
+    entries,
+    selectedIndex,
+    selectEntry,
+    shiftSelection,
+    setQuery,
+    submitSelection
+  ] = useEntries(onSelectAction);
   const elRef = useOnKeyDown(event => {
     event.stopPropagation();
     const key = event.key;
-    console.debug("elRef");
     if (key === "ArrowUp") shiftSelection(-1);
     else if (key === "ArrowDown") shiftSelection(1);
     else if (key === "Enter") submitSelection();
   });
-  function shiftSelection(offset) {
-    const index = selectedIndex + offset;
-    if (-1 < index && index < entries.length) selectEntry(index);
-  }
-  function submitSelection() {
-    const selectedEntry = entries[selectedIndex];
-    onSelectAction(selectedEntry.extensionId, selectedEntry.action);
-  }
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <div
@@ -48,6 +46,38 @@ export default function SearchModal({
   );
 }
 
+function useEntries(onSelectAction) {
+  const [q, setQuery] = useState("");
+  const [entries, setEntries] = useState([]);
+  const [selectedIndex, selectEntry] = useState(0);
+  useEffect(() => {
+    getActionSpecs(actionSpecs => {
+      setEntries(constructEntries(actionSpecs, q));
+      selectEntry(0);
+    });
+  }, [q]);
+  function shiftSelection(offset) {
+    const index = selectedIndex + offset;
+    if (-1 < index && index < entries.length) selectEntry(index);
+  }
+  function submitSelection() {
+    const selectedEntry = entries[selectedIndex];
+    onSelectAction(selectedEntry.extensionId, selectedEntry.action);
+  }
+  return [
+    entries,
+    selectedIndex,
+    selectEntry,
+    shiftSelection,
+    setQuery,
+    submitSelection
+  ];
+}
+
+function getActionSpecs(callback) {
+  chrome.storage.sync.get({ actionSpecs: [] }, ({ actionSpecs }) => callback(actionSpecs))
+}
+
 const internalActions = [
   {
     key: "internal-0",
@@ -57,22 +87,11 @@ const internalActions = [
   }
 ];
 
-function useEntries() {
-  const [q, setQuery] = useState("");
-  const [entries, setEntries] = useState([]);
-  const [selectedIndex, selectEntry] = useState(0);
-  useEffect(() => {
-    chrome.storage.sync.get({ actionSpecs: [] }, ({ actionSpecs }) => {
-      setEntries(
-        [
-          ...internalActions,
-          ...actionSpecs.flatMap(extensionSpecToEntries)
-        ].filter(matchQuery(q))
-      );
-      selectEntry(0);
-    });
-  }, [q]);
-  return [entries, selectedIndex, selectEntry, setQuery];
+function constructEntries(actionSpecs, q) {
+  return [
+    ...internalActions,
+    ...actionSpecs.flatMap(extensionSpecToEntries)
+  ].filter(matchQuery(q))
 }
 
 const matchQuery = q => entry =>
