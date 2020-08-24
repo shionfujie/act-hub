@@ -65,6 +65,7 @@ function useEntries(onSelectAction, onRequestClose) {
   function submitSelection() {
     const selectedEntry = entries[selectedIndex];
     onSelectAction(selectedEntry.extensionId, selectedEntry.action);
+    setQuery("")
   }
   return [
     entries,
