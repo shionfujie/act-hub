@@ -8,9 +8,9 @@ chrome.management.onInstalled.addListener(({ id }) => {
 
 function storeActionSpec(thisSpec) {
   if (
-    thisSpec.id != undefined ||
-    thisSpec.name != undefined ||
-    thisSpec.actions != undefined
+    thisSpec.id === undefined ||
+    thisSpec.name === undefined ||
+    thisSpec.actions === undefined
   )
     return;
   getActionSpecs(actionSpecs => {
