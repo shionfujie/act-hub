@@ -6,12 +6,7 @@ import SearchInput from "./SearchInput";
 import containsSparsely from "../util/containsSparsely";
 import useOnKeyDown from "../hooks/useOnKeyDown";
 import useOnKeyUp from "../hooks/useOnKeyUp";
-
-function combinefuns(...funs) {
-  return (...args) => {
-    return funs.map(f => f(...args));
-  };
-}
+import combinefuns from "../util/combineFuns";
 
 export default function SearchModal({
   isOpen,
