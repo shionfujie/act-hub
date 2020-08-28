@@ -5,6 +5,7 @@ import SearchResult from "./SearchResult";
 import SearchInput from "./SearchInput";
 import containsSparsely from "../util/containsSparsely";
 import useOnKeyDown from "../hooks/useOnKeyDown";
+import useOnKeyUp from "../hooks/useOnKeyUp";
 
 function combinefuns(...funs) {
   return (...args) => {
@@ -55,13 +56,6 @@ export default function SearchModal({
       </div>
     </Modal>
   );
-}
-
-function useOnKeyUp(onkeyup) {
-  return inputEl => {
-    if (inputEl === null) return;
-    inputEl.onkeyup = onkeyup;
-  };
 }
 
 function useEntries(onSelectAction, onRequestClose) {
