@@ -1,7 +1,7 @@
 {
   "name": "ActHub",
   "description": "A single hub for all actions",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "manifest_version": 2,
   "icons": {
     "16": "./get_started16.png",
