@@ -5,6 +5,8 @@ import SearchResult from "./SearchResult";
 import SearchInput from "./SearchInput";
 import containsSparsely from "../util/containsSparsely";
 import useOnKeyDown from "../hooks/useOnKeyDown";
+import useOnKeyUp from "../hooks/useOnKeyUp";
+import combinefuns from "../util/combineFuns";
 
 export default function SearchModal({
   isOpen,
@@ -20,17 +22,21 @@ export default function SearchModal({
     submitSelection,
     onRequestClose$
   ] = useEntries(onSelectAction, onRequestClose);
-  const elRef = useOnKeyDown(event => {
+  const onkeydownRef = useOnKeyDown(event => {
     event.stopPropagation();
     const key = event.key;
     if (key === "ArrowUp") shiftSelection(-1);
     else if (key === "ArrowDown") shiftSelection(1);
-    else if (key === "Enter") submitSelection();
-  });
+  })
+  const onkeyupRef = useOnKeyUp(event => {
+    event.stopPropagation();
+    const key = event.key;
+    if (key === "Enter") submitSelection();
+  })
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose$}>
       <div
-        ref={elRef}
+        ref={combinefuns(onkeydownRef, onkeyupRef)}
         className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden"
       >
         <SearchInput onChange={setQuery} />

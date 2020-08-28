@@ -8,6 +8,7 @@ import SearchModal from "./components/SearchModal";
 import ReactModal from "react-modal";
 import useFocusCallback from "./hooks/useFocusCallback";
 import useOnKeyDown from "./hooks/useOnKeyDown"
+import combineFuns from "./util/combineFuns";
 
 function Main() {
   const shortcut = useShortcut();
@@ -92,12 +93,6 @@ function KeyBindingModal({ isOpen, onRequestClose, onConfirmed }) {
       </div>
     </Modal>
   );
-}
-
-function combineFuns(...funs) {
-  return (...args) => {
-    return funs.map(f => f(...args));
-  };
 }
 
 function KeyBindingInput({ onConfirmed }) {
