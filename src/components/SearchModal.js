@@ -120,19 +120,6 @@ function constructEntries(actionSpecs, q) {
         entries.push(m.entry)
       }
       else {
-        const lt = (m, m1) => {
-          if (m.count > m1.count) return true
-          else if (m.count < m1.count) return false
-          else {
-            if (m.density < m1.density) return true
-            else if (m.density > m1.density) return false
-            else {
-              if(m.position < m1.position) return true
-              else if (m.position > m1.position) return false
-              else return false
-            }
-          }
-        }
         for (var j = r.length - 1; j >= 0 && lt(m, r[j]); j--);
         r.splice(j + 1, 0, m)
         entries.splice(j + 1, 0, m.entry)
@@ -160,6 +147,20 @@ function matchResult(entry, q) {
     }
   }
   return {entry, position, density, count}
+}
+
+const lt = (m, m1) => {
+  if (m.count > m1.count) return true
+  else if (m.count < m1.count) return false
+  else {
+    if (m.density < m1.density) return true
+    else if (m.density > m1.density) return false
+    else {
+      if(m.position < m1.position) return true
+      else if (m.position > m1.position) return false
+      else return false
+    }
+  }
 }
 
 const matchQuery = q => entry =>
