@@ -163,9 +163,6 @@ const lt = (m, m1) => {
   }
 }
 
-const matchQuery = q => entry =>
-  containsSparsely(Array.from(entry.title), Array.from(q));
-
 function extensionSpecToEntries({ id, name, actions }) {
   return actions.map((action, index) => {
     return {
