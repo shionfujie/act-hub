@@ -107,20 +107,16 @@ function constructEntries(actionSpecs, q) {
     ...internalActions,
     ...actionSpecs.flatMap(extensionSpecToEntries)
   ]
-  console.debug(entries$)
-  console.debug(q)
   const r = []
   const entries = []
   for (const entry of entries$) {
     const m = matchResult(entry, q)
-    console.debug(m)
     if (m.count >= q.length) {
       for (var j = r.length - 1; j >= 0 && lt(m, r[j]); j--);
       r.splice(j + 1, 0, m)
       entries.splice(j + 1, 0, m.entry)
     }
   }
-  console.debug(r)
   return entries
 }
 
@@ -132,7 +128,6 @@ function matchResult(entry, q) {
   var density = 0
   var count = 0
   for (var i = 0, j = 0; i < ec.length && j < qc.length; i++) {
-    console.log()
     if (compareCaseInsensitively(ec[i], qc[j])) {
       if (j === 0) position = i
       else density += i - m
