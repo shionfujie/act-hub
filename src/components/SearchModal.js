@@ -115,15 +115,9 @@ function constructEntries(actionSpecs, q) {
     const m = matchResult(entry, q)
     console.debug(m)
     if (m.count >= q.length) {
-      if (r.length == 0) {
-        r.push(m)
-        entries.push(m.entry)
-      }
-      else {
-        for (var j = r.length - 1; j >= 0 && lt(m, r[j]); j--);
-        r.splice(j + 1, 0, m)
-        entries.splice(j + 1, 0, m.entry)
-      }
+      for (var j = r.length - 1; j >= 0 && lt(m, r[j]); j--);
+      r.splice(j + 1, 0, m)
+      entries.splice(j + 1, 0, m.entry)
     }
   }
   console.debug(r)
