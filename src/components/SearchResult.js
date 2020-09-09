@@ -5,6 +5,7 @@ export default function SearchResult({ entries, selectedIndex, selectEntry, subm
   console.debug(selectedIndex)
   return (
     <div>
+      <div className="border-top-width-normal border-top-solid border-top-color-shade-013" style={{marginLeft: 7, marginRight: 7}}></div>
       <ul className="list-style-type-none">
         {entries.map((entry, index) => {
           return (

@@ -85,6 +85,10 @@
     border-color: #dddddd;
 }
 
+.border-top-color-shade-013 {
+    border-top-color: #dddddd;
+}
+
 .border-primary {
     border-color: rgb(26, 115, 232);
 }
@@ -218,6 +222,7 @@
     box-shadow: rgba(29, 17, 17, 0.15) 0px 5px 12px;
 }
 
+
 .radius-tiny {
     border-radius: 2px;
 }
@@ -234,6 +239,10 @@
     border-width: 1px;
 }
 
+.border-top-width-normal {
+    border-top-width: 1px;
+}
+
 .border-width-thick {
     border-width: 2px;
 }
@@ -245,6 +254,11 @@
 .border-solid {
     border-style: solid;
 }
+
+.border-top-solid {
+    border-top-style: solid;
+}
+
 
 .border-color-shade-100 {
     border-color: #fff;
