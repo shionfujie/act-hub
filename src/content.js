@@ -17,6 +17,7 @@ function Main() {
   useDocumentKeydown(event => {
     if (shortcut === null) return;
     if (confirmShortcut(shortcut, event)) openModal();
+    else if (event.code === "Escape") closeModal()
   });
   function executeInternalAction(action) {
     switch (action.type) {
