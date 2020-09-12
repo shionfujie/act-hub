@@ -34,6 +34,7 @@ export default function SearchModal({
     event.stopPropagation();
     const key = event.key;
     if (key === "Enter") submitSelection();
+    else if (key == "Escape") onRequestClose$()
   })
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose$}>
