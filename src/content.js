@@ -16,11 +16,11 @@ function Main() {
   const [keybindingModalIsOpen, openKeybinding, closeKeyBinding] = useSwitch()
   useDocumentKeydown(event => {
     if (shortcut === null) return;
-    if (confirmShortcut(shortcut, event)) {
+    if (!modalIsOpen && confirmShortcut(shortcut, event)) {
       openModal();
       event.stopPropagation()
     }
-    else if (event.code === "Escape") {
+    else if (modalIsOpen && event.code === "Escape") {
       closeModal()
       event.stopPropagation()
     }
