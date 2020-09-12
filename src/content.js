@@ -20,32 +20,34 @@ function Main() {
     else if (event.code === "Escape") closeModal()
     event.stopPropagation()
   });
-  function executeInternalAction(action) {
+  const executeInternalAction = (action) => {
     switch (action.type) {
       case "keybinding":
         openKeybinding()
         break;
     }
   }
+  const requestExecuteAction = (id, action) => {
+    closeModal();
+    if (id === "internal") executeInternalAction(action);
+    else
+      chrome.runtime.sendMessage(id, { type: "execute action", action });
+  }
+  const updateKeyCombination = keyCombination => {
+    closeModal();
+    chrome.storage.sync.set({ shortcut: keyCombination });
+  }
   return (
     <>
       <SearchModal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
-        onSelectAction={(id, action) => {
-          closeModal();
-          if (id === "internal") executeInternalAction(action);
-          else
-            chrome.runtime.sendMessage(id, { type: "execute action", action });
-        }}
+        onSelectAction={requestExecuteAction}
       />
       <KeyBindingModal
         isOpen={keybindingModalIsOpen}
         onRequestClose={closeKeyBinding}
-        onConfirmed={keyCombination => {
-          closeModal();
-          chrome.storage.sync.set({ shortcut: keyCombination });
-        }}
+        onConfirmed={updateKeyCombination}
       />
     </>
   );
