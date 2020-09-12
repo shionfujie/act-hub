@@ -34,7 +34,7 @@ function Main() {
       chrome.runtime.sendMessage(id, { type: "execute action", action });
   }
   const updateKeyCombination = keyCombination => {
-    closeModal();
+    closeKeyBinding();
     chrome.storage.sync.set({ shortcut: keyCombination });
   }
   return (
