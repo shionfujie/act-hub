@@ -16,9 +16,15 @@ function Main() {
   const [keybindingModalIsOpen, openKeybinding, closeKeyBinding] = useSwitch()
   useDocumentKeydown(event => {
     if (shortcut === null) return;
-    if (confirmShortcut(shortcut, event)) openModal();
-    else if (event.code === "Escape") closeModal()
-    event.stopPropagation()
+    if (confirmShortcut(shortcut, event)) {
+      openModal();
+      event.stopPropagation()
+    }
+    else if (event.code === "Escape") {
+      closeModal()
+      event.stopPropagation()
+    }
+    
   });
   const executeInternalAction = (action) => {
     switch (action.type) {
