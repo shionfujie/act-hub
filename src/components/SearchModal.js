@@ -15,15 +15,31 @@ export default function SearchModal({
   onRequestClose,
   onSelectAction
 }) {
-  const [
-    entries,
-    selectedIndex,
-    selectEntry,
-    shiftSelection,
-    setQuery,
-    submitSelection,
-    onRequestClose$
-  ] = useEntries(onSelectAction, onRequestClose);
+  const [actions, onQueryChange] = useActions()
+  return (
+    <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
+      <SearchableList
+          actions={actions}
+          onQueryChange={onQueryChange}
+          onSelectAction={onSelectAction}
+          onRequestClose={onRequestClose}
+        />
+    </Modal>
+  );
+}
+
+function SearchableList({actions, onQueryChange, onSelectAction, onRequestClose}) {
+  const [selectedIndex, selectIndex] = useState(0);
+  useEffect(() => selectIndex(0), [actions]);
+  function shiftSelection(offset) {
+    const index = selectedIndex + offset;
+    if (-1 < index && index < actions.length) selectIndex(index);
+  }
+  function submitAction() {
+    const {extensionId, action} = actions[selectedIndex];
+    onSelectAction(extensionId, action);
+    onQueryChange("")
+  }
   const onkeydownRef = useOnKeyDown(event => {
     event.stopPropagation();
     const key = event.key;
@@ -33,61 +49,43 @@ export default function SearchModal({
   const onkeyupRef = useOnKeyUp(event => {
     event.stopPropagation();
     const key = event.key;
-    if (key === "Enter") submitSelection();
-    else if (key == "Escape") onRequestClose$()
+    if (key === "Enter") submitAction();
+    else if (key == "Escape") {
+      onRequestClose()
+      onQueryChange("")
+    }
   })
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose$}>
-      <div
+    <div
         ref={combinefuns(onkeydownRef, onkeyupRef)}
         className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden"
       >
-        <SearchInput onChange={setQuery} />
-        {entries.length > 0 && (
+        <SearchInput onChange={onQueryChange} />
+        {actions.length > 0 && (
           <SearchResult
-            entries={entries}
+            actions={actions}
             selectedIndex={selectedIndex}
-            submitSelection={submitSelection}
-            selectEntry={selectEntry}
+            submitAction={submitAction}
+            selectIndex={selectIndex}
           />
         )}
-      </div>
-    </Modal>
-  );
+    </div>
+  )
 }
 
-function useEntries(onSelectAction, onRequestClose) {
+function useActions() {
   const [q, setQuery] = useState("");
-  console.debug(`'${q}'`)
-  const [entries, setEntries] = useState([]);
-  const [selectedIndex, selectEntry] = useState(0);
+  const [actions, setActions] = useState([]);
   useEffect(() => {
     getActionSpecs(actionSpecs => {
-      setEntries(constructEntries(actionSpecs, q));
-      selectEntry(0);
+      const actions = [
+        ...internalActions,
+        ...actionSpecs.flatMap(extensionSpecToEntries)
+      ]
+      setActions(sortActions(actions, q));
     });
   }, [q]);
-  function shiftSelection(offset) {
-    const index = selectedIndex + offset;
-    if (-1 < index && index < entries.length) selectEntry(index);
-  }
-  function submitSelection() {
-    const selectedEntry = entries[selectedIndex];
-    onSelectAction(selectedEntry.extensionId, selectedEntry.action);
-    setQuery("")
-  }
-  return [
-    entries,
-    selectedIndex,
-    selectEntry,
-    shiftSelection,
-    setQuery,
-    submitSelection,
-    () => {
-      onRequestClose()
-      setQuery("")
-    }
-  ];
+  return [actions, setQuery];
 }
 
 function getActionSpecs(callback) {
@@ -103,26 +101,22 @@ const internalActions = [
   }
 ];
 
-function constructEntries(actionSpecs, q) {
-  const entries$ = [
-    ...internalActions,
-    ...actionSpecs.flatMap(extensionSpecToEntries)
-  ]
-  const r = []
-  const entries = []
-  for (const entry of entries$) {
-    const m = matchResult(entry, q)
+function sortActions(actions, q) {
+  const ms = []
+  const sorted = []
+  for (const action of actions) {
+    const m = match(action.title, q)
     if (m.count >= q.length) {
-      for (var j = r.length - 1; j >= 0 && lt(m, r[j]); j--);
-      r.splice(j + 1, 0, m)
-      entries.splice(j + 1, 0, m.entry)
+      for (var j = ms.length - 1; j >= 0 && lt(m, ms[j]); j--);
+      ms.splice(j + 1, 0, m)
+      sorted.splice(j + 1, 0, action)
     }
   }
-  return entries
+  return sorted
 }
 
-function matchResult(entry, q) {
-  const ec = Array.from(entry.title)
+function match(title, q) {
+  const ec = Array.from(title)
   const qc = Array.from(q)
   var m
   var position = - 1
@@ -136,7 +130,7 @@ function matchResult(entry, q) {
       j++; count++
     }
   }
-  return {entry, position, density, count}
+  return {position, density, count}
 }
 
 const lt = (m, m1) => {
