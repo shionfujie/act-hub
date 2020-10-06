@@ -78,7 +78,11 @@ function useActions() {
   const [actions, setActions] = useState([]);
   useEffect(() => {
     getActionSpecs(actionSpecs => {
-      setActions(constructEntries(actionSpecs, q));
+      const actions = [
+        ...internalActions,
+        ...actionSpecs.flatMap(extensionSpecToEntries)
+      ]
+      setActions(sortActions(actions, q));
     });
   }, [q]);
   return [actions, setQuery];
@@ -97,22 +101,18 @@ const internalActions = [
   }
 ];
 
-function constructEntries(actionSpecs, q) {
-  const entries$ = [
-    ...internalActions,
-    ...actionSpecs.flatMap(extensionSpecToEntries)
-  ]
-  const r = []
-  const entries = []
-  for (const entry of entries$) {
+function sortActions(actions, q) {
+  const ms = []
+  const sorted = []
+  for (const entry of actions) {
     const m = matchResult(entry, q)
     if (m.count >= q.length) {
-      for (var j = r.length - 1; j >= 0 && lt(m, r[j]); j--);
-      r.splice(j + 1, 0, m)
-      entries.splice(j + 1, 0, m.entry)
+      for (var j = ms.length - 1; j >= 0 && lt(m, ms[j]); j--);
+      ms.splice(j + 1, 0, m)
+      sorted.splice(j + 1, 0, entry)
     }
   }
-  return entries
+  return sorted
 }
 
 function matchResult(entry, q) {
