@@ -56,9 +56,8 @@ export default function SearchModal({
   );
 }
 
-function useEntries(onSelectAction, onRequestClose) {
+function useEntries(onSelectAction, $onRequestClose) {
   const [q, setQuery] = useState("");
-  console.debug(`'${q}'`)
   const [entries, setEntries] = useState([]);
   const [selectedIndex, selectEntry] = useState(0);
   useEffect(() => {
@@ -67,24 +66,22 @@ function useEntries(onSelectAction, onRequestClose) {
       selectEntry(0);
     });
   }, [q]);
-  function shiftSelection(offset) {
-    const index = selectedIndex + offset;
-    if (-1 < index && index < entries.length) selectEntry(index);
-  }
-  function submitSelection() {
-    const selectedEntry = entries[selectedIndex];
-    onSelectAction(selectedEntry.extensionId, selectedEntry.action);
-    setQuery("")
-  }
   return [
     entries,
     selectedIndex,
     selectEntry,
-    shiftSelection,
+    function shiftSelection(offset) {
+      const index = selectedIndex + offset;
+      if (-1 < index && index < entries.length) selectEntry(index);
+    },
     setQuery,
-    submitSelection,
-    () => {
-      onRequestClose()
+    function submitSelection() {
+      const selectedEntry = entries[selectedIndex];
+      onSelectAction(selectedEntry.extensionId, selectedEntry.action);
+      setQuery("")
+    },
+    function onRequestClose() {
+      $onRequestClose()
       setQuery("")
     }
   ];
