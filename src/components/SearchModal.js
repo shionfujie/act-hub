@@ -12,18 +12,34 @@ import compareCaseInsensitively from "../util/compareCaseInsensitively";
 
 export default function SearchModal({
   isOpen,
-  onRequestClose$,
+  onRequestClose,
   onSelectAction
 }) {
-  const [
-    actions,
-    selectedIndex,
-    selectAction,
-    shiftSelection,
-    setQuery,
-    submitAction,
-    onRequestClose
-  ] = useEntries(onSelectAction, onRequestClose$);
+  const [actions, onQueryChange] = useActions()
+  return (
+    <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
+      <SearchableList
+          actions={actions}
+          onQueryChange={onQueryChange}
+          onSelectAction={onSelectAction}
+          onRequestClose={onRequestClose}
+        />
+    </Modal>
+  );
+}
+
+function SearchableList({actions, onQueryChange, onSelectAction, onRequestClose}) {
+  const [selectedIndex, selectIndex] = useState(0);
+  useEffect(() => selectIndex(0), [actions]);
+  function shiftSelection(offset) {
+    const index = selectedIndex + offset;
+    if (-1 < index && index < actions.length) selectIndex(index);
+  }
+  function submitAction() {
+    const {extensionId, action} = actions[selectedIndex];
+    onSelectAction(extensionId, action);
+    onQueryChange("")
+  }
   const onkeydownRef = useOnKeyDown(event => {
     event.stopPropagation();
     const key = event.key;
@@ -34,57 +50,38 @@ export default function SearchModal({
     event.stopPropagation();
     const key = event.key;
     if (key === "Enter") submitAction();
-    else if (key == "Escape") onRequestClose()
+    else if (key == "Escape") {
+      onRequestClose()
+      onQueryChange("")
+    }
   })
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
-      <div
+    <div
         ref={combinefuns(onkeydownRef, onkeyupRef)}
         className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden"
       >
-        <SearchInput onChange={setQuery} />
+        <SearchInput onChange={onQueryChange} />
         {actions.length > 0 && (
           <SearchResult
             actions={actions}
             selectedIndex={selectedIndex}
             submitAction={submitAction}
-            selectAction={selectAction}
+            selectIndex={selectIndex}
           />
         )}
-      </div>
-    </Modal>
-  );
+    </div>
+  )
 }
 
-function useEntries(onSelectAction, $onRequestClose) {
+function useActions() {
   const [q, setQuery] = useState("");
   const [actions, setActions] = useState([]);
-  const [selectedIndex, selectIndex] = useState(0);
   useEffect(() => {
     getActionSpecs(actionSpecs => {
       setActions(constructEntries(actionSpecs, q));
-      selectIndex(0);
     });
   }, [q]);
-  return [
-    actions,
-    selectedIndex,
-    selectIndex,
-    function shiftSelection(offset) {
-      const index = selectedIndex + offset;
-      if (-1 < index && index < actions.length) selectIndex(index);
-    },
-    setQuery,
-    function submitAction() {
-      const {extensionId, action} = actions[selectedIndex];
-      onSelectAction(extensionId, action);
-      setQuery("")
-    },
-    function onRequestClose() {
-      $onRequestClose()
-      setQuery("")
-    }
-  ];
+  return [actions, setQuery];
 }
 
 function getActionSpecs(callback) {
