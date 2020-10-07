@@ -1,4 +1,4 @@
-import compareCaseInsensitively from "../util/compareCaseInsensitively";
+import equalsCaseInsensitively from "../util/compareCaseInsensitively";
 
 export function extensionSpecToEntries({ id, name, actions }) {
   return actions.map((action, index) => {
@@ -34,7 +34,7 @@ function match(title, q) {
   var density = 0;   // The sum of distances between matches
   var p;             // The Previous position that matched
   for (var i = 0, j = 0; i < ts.length && j < qs.length; i++) {
-    if (compareCaseInsensitively(ts[i], qs[j])) {
+    if (equalsCaseInsensitively(ts[i], qs[j])) {
       if (j === 0) position = i;
       else density += i - p;
       p = i;
