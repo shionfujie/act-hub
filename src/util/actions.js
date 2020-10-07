@@ -11,6 +11,8 @@ export function extensionSpecToEntries({ id, name, actions }) {
   });
 }
 
+// Sorts actions according to the match results of their titles 
+// against q.
 export function sortActions(actions, q) {
   const ms = [];
   const sorted = [];
@@ -25,6 +27,7 @@ export function sortActions(actions, q) {
   return sorted;
 }
 
+// Calculates parameters for the sorting.
 function match(title, q) {
   const ec = Array.from(title);
   const qc = Array.from(q);
@@ -44,6 +47,7 @@ function match(title, q) {
   return { position, density, count };
 }
 
+// Compares lexicographically.
 const lt = (m, m1) => {
   if (m.count > m1.count) return true;
   else if (m.count < m1.count) return false;
