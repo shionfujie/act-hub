@@ -18,7 +18,7 @@ export function sortActions(actions, q) {
   const sorted = [];
   for (const action of actions) {
     const m = match(action.title, q);
-    if (m.count < q.length) continue;
+    if (m.count !== q.length) continue;
     for (var j = ms.length - 1; j >= 0 && lt(m, ms[j]); j--);
     ms.splice(j + 1, 0, m);
     sorted.splice(j + 1, 0, action);
