@@ -28,16 +28,16 @@ export function sortActions(actions, q) {
 
 // Calculates parameters for the sorting.
 function match(title, q) {
-  const ec = Array.from(title);
-  const qc = Array.from(q);
+  const ts = Array.from(title);
+  const qs = Array.from(q);
   var position = -1; // The first position that matches
-  var density = 0; // The sum of distances between matches
-  var m; // The Previous position that matched
-  for (var i = 0, j = 0; i < ec.length && j < qc.length; i++) {
-    if (compareCaseInsensitively(ec[i], qc[j])) {
+  var density = 0;   // The sum of distances between matches
+  var p;             // The Previous position that matched
+  for (var i = 0, j = 0; i < ts.length && j < qs.length; i++) {
+    if (compareCaseInsensitively(ts[i], qs[j])) {
       if (j === 0) position = i;
-      else density += i - m;
-      m = i;
+      else density += i - p;
+      p = i;
       j++;
     }
   }
