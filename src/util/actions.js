@@ -32,7 +32,6 @@ function match(title, q) {
   const qc = Array.from(q);
   var position = -1; // The first position that matches
   var density = 0; // The sum of distances between matches
-  var count = 0;
   var m; // The Previous position that matched
   for (var i = 0, j = 0; i < ec.length && j < qc.length; i++) {
     if (compareCaseInsensitively(ec[i], qc[j])) {
@@ -40,10 +39,9 @@ function match(title, q) {
       else density += i - m;
       m = i;
       j++;
-      count++;
     }
   }
-  return { position, density, count };
+  return { position, density, count: j };
 }
 
 // Compares lexicographically.
