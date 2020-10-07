@@ -14,8 +14,8 @@ export function extensionSpecToEntries({ id, name, actions }) {
 // Sorts actions according to the match results of their titles
 // against q.
 export function sortActions(actions, q) {
-  const ms = [];
   const sorted = [];
+  const ms = []; // Match results that represent ranks of actions
   for (const action of actions) {
     const m = match(action.title, q);
     if (m.count !== q.length) continue;
