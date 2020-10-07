@@ -30,10 +30,10 @@ export function sortActions(actions, q) {
 function match(title, q) {
   const ec = Array.from(title);
   const qc = Array.from(q);
-  var m;
-  var position = -1;
-  var density = 0;
+  var position = -1; // The first position that matches
+  var density = 0; // The sum of distances between matches
   var count = 0;
+  var m; // The Previous position that matched
   for (var i = 0, j = 0; i < ec.length && j < qc.length; i++) {
     if (compareCaseInsensitively(ec[i], qc[j])) {
       if (j === 0) position = i;
