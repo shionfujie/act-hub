@@ -1,55 +1,25 @@
-/*global chrome*/
-import React, { useState, useEffect } from "react";
+import React from "react";
 import ReactModal from "react-modal";
 import SearchableList from "./SearchableList";
-import { extensionSpecToEntries, sortActions } from "../util/actions";
-
 
 export default function SearchModal({
   isOpen,
+  entries,
+  onQueryChange,
   onRequestClose,
   onSelectAction
 }) {
-  const [actions, onQueryChange] = useActions()
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <SearchableList
-          actions={actions}
-          onQueryChange={onQueryChange}
-          onSelectAction={onSelectAction}
-          onRequestClose={onRequestClose}
-        />
+        actions={entries}
+        onQueryChange={onQueryChange}
+        onSelectAction={onSelectAction}
+        onRequestClose={onRequestClose}
+      />
     </Modal>
   );
 }
-
-function useActions() {
-  const [q, setQuery] = useState("");
-  const [actions, setActions] = useState([]);
-  useEffect(() => {
-    getActionSpecs(actionSpecs => {
-      const actions = [
-        ...internalActions,
-        ...actionSpecs.flatMap(extensionSpecToEntries)
-      ]
-      setActions(sortActions(actions, q));
-    });
-  }, [q]);
-  return [actions, setQuery];
-}
-
-function getActionSpecs(callback) {
-  chrome.storage.sync.get({ actionSpecs: [] }, ({ actionSpecs }) => callback(actionSpecs))
-}
-
-const internalActions = [
-  {
-    key: "internal-0",
-    extensionId: "internal",
-    title: "Preferences: Change Keybinding",
-    action: { type: "keybinding" }
-  }
-];
 
 function Modal({ isOpen, onRequestClose, children }) {
   return (

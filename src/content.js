@@ -4,48 +4,45 @@ import ReactDOM from "react-dom";
 import "./css/content.css";
 import useSwitch from "./hooks/useSwitch";
 import useDocumentKeydown from "./hooks/useDocumentKeydown";
-import SearchModal from "./components/SearchModal";
 import ReactModal from "react-modal";
 import useFocusCallback from "./hooks/useFocusCallback";
-import useOnKeyDown from "./hooks/useOnKeyDown"
+import useOnKeyDown from "./hooks/useOnKeyDown";
 import combineFuns from "./util/combineFuns";
+import ActionSearchModal from "./components/ActionSearchModal";
 
 function Main() {
   const shortcut = useShortcut();
   const [modalIsOpen, openModal, closeModal] = useSwitch();
-  const [keybindingModalIsOpen, openKeybinding, closeKeyBinding] = useSwitch()
+  const [keybindingModalIsOpen, openKeybinding, closeKeyBinding] = useSwitch();
   useDocumentKeydown(event => {
     if (shortcut === null) return;
     if (!modalIsOpen && confirmShortcut(shortcut, event)) {
       openModal();
-      event.stopPropagation()
+      event.stopPropagation();
+    } else if (modalIsOpen && event.code === "Escape") {
+      closeModal();
+      event.stopPropagation();
     }
-    else if (modalIsOpen && event.code === "Escape") {
-      closeModal()
-      event.stopPropagation()
-    }
-    
   });
-  const executeInternalAction = (action) => {
+  const executeInternalAction = action => {
     switch (action.type) {
       case "keybinding":
-        openKeybinding()
+        openKeybinding();
         break;
     }
-  }
+  };
   const requestExecuteAction = (id, action) => {
     closeModal();
     if (id === "internal") executeInternalAction(action);
-    else
-      chrome.runtime.sendMessage(id, { type: "execute action", action });
-  }
+    else chrome.runtime.sendMessage(id, { type: "execute action", action });
+  };
   const updateKeyCombination = keyCombination => {
     closeKeyBinding();
     chrome.storage.sync.set({ shortcut: keyCombination });
-  }
+  };
   return (
     <>
-      <SearchModal
+      <ActionSearchModal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         onSelectAction={requestExecuteAction}
