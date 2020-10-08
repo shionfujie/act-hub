@@ -16,10 +16,11 @@ export function extensionSpecToEntries({ id, name, actions }) {
 export function sortActions(actions, q) {
   const sorted = [];
   const ms = []; // Match results that represent ranks of actions
+  
   for (const action of actions) {
     const m = match(action.title, q);
     if (m.count !== q.length) continue;
-    for (var j = ms.length - 1; lt(m, ms[j]) && j >= 0; j--);
+    for (var j = ms.length - 1; j >= 0 && (ms.length === 0 || lt(m, ms[j])); j--);
     ms.splice(j + 1, 0, m);
     sorted.splice(j + 1, 0, action);
   }
@@ -33,7 +34,9 @@ function match(title, q) {
   var position = -1; // The first position that matches
   var density = 0;   // The sum of distances between matches
   var p;             // The Previous position that matched
-  for (var i = 0, j = 0; i < ts.length && j < qs.length; i++) {
+  var i = 0
+  var j = 0;
+  for (; i < ts.length && j < qs.length; i++) {
     if (equalsCaseInsensitively(ts[i], qs[j])) {
       if (j === 0) position = i;
       else density += i - p;
