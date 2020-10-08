@@ -1,23 +1,18 @@
 /*global chrome*/
 import React, { useState, useEffect } from "react";
 import SearchModal from "./SearchModal";
-import { extensionSpecToEntries, sortActions } from "../util/actions";
+import { extensionSpecToEntries } from "../util/actions";
 
 export default function ActionSearchModal({
   isOpen,
   onRequestClose,
   onSelectAction
 }) {
-  const [actions, loaded] = useActions(isOpen);
-  const [q, setQuery] = useState('')
-  const [viewModel, setViewModel] = useState([])
-  useEffect(() => {
-    if (loaded) setViewModel(sortActions(actions, q))
-  }, [q, loaded])
+  const [actions, isLoading] = useActions(isOpen);
   return (
     <SearchModal
-      entries={viewModel}
-      onQueryChange={setQuery}
+      entries={actions}
+      isLoading={isLoading}
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       onSelectAction={onSelectAction}
@@ -29,7 +24,7 @@ export default function ActionSearchModal({
 // and reloads as reopened
 function useActions(isOpen) {
   const [actions, setActions] = useState([]);
-  const [loaded, setLoaded] = useState(false);
+  const [isLoading, setLoading] = useState(true);
   useEffect(() => {
     if (!isOpen) return;
     getActionSpecs(
@@ -38,12 +33,12 @@ function useActions(isOpen) {
           ...internalActions,
           ...actionSpecs.flatMap(extensionSpecToEntries)
         ];
-        setActions(sortActions(actions, ""));
-        setLoaded(true);
+        setActions(actions, "");
+        setLoading(false);
       }
     );
   }, [isOpen]);
-  return [actions, loaded];
+  return [actions, isLoading];
 }
 
 function getActionSpecs(callback) {
