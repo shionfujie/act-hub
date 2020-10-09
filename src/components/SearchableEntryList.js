@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import SearchInput from "./SearchInput";
 import SearchEntryList from "./SearchEntryList";
-import { searchEntries } from "../util/actions";
 import useOnKeyDown from "../hooks/useOnKeyDown";
 import useOnKeyUp from "../hooks/useOnKeyUp";
 import combinefuns from "../util/combineFuns";
+import useSearchController from "../hooks/controllers/useSearchController";
+import useSelectionController from "../hooks/controllers/useSelectionController";
 
 export default function SearchableEntryList({
   isLoading,
@@ -49,42 +50,6 @@ export default function SearchableEntryList({
       )}
     </div>
   );
-}
-
-function useSearchController(entries, isLoading) {
-  const [q, setQuery] = useState("");
-  const [controller, setController] = useState({
-    searchResult: entries,
-    setQuery: setQuery
-  });
-  useEffect(() => {
-    if (isLoading) return;
-    setController({ ...controller, searchResult: searchEntries(entries, q) });
-  }, [q, entries, isLoading]);
-  return controller;
-}
-
-function useSelectionController(entries, onSelectEntry) {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  function selectIndex(index) {
-    if (-1 < index && index < entries.length) setSelectedIndex(index);
-  }
-  function shiftSelection(offset) {
-    selectIndex(selectedIndex + offset);
-  }
-  function submitEntry() {
-    onSelectEntry(entries[selectedIndex]);
-  }
-  useEffect(() => {
-    selectIndex(0);
-  }, [entries]);
-  return {
-    entries,
-    selectedIndex,
-    selectIndex,
-    shiftSelection,
-    submitEntry
-  };
 }
 
 function useKeyUpEvent() {
