@@ -6,6 +6,7 @@ export default function useSelectionController(entries, onSelectEntry) {
     if (-1 < index && index < entries.length) setSelectedIndex(index);
   }
   function shiftSelection(offset) {
+    console.log(`selectionController.shiftSelection: selectedIndex=${selectedIndex}`)
     selectIndex(selectedIndex + offset);
   }
   function submitEntry() {
@@ -14,6 +15,7 @@ export default function useSelectionController(entries, onSelectEntry) {
   useEffect(() => {
     selectIndex(0);
   }, [entries]);
+  console.log(`selectedIndex=${selectedIndex}`)
   return {
     entries,
     selectedIndex,

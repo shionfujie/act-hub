@@ -21,20 +21,22 @@ export default function SearchableEntryList({
       searchController.setQuery("");
     }
   );
-  const [keyUpEvent, onkeyupRef] = useKeyUpEvent();
-  const [keyDownEvent, onkeydownRef] = useKeyDownEvent();
-  if (keyUpEvent) {
-    keyUpEvent.stopPropagation();
-    const key = keyUpEvent.key;
+  const handleKeyDown = event => {
+    event.stopPropagation();
+    const key = event.key;
     if (key === "ArrowUp") selectionController.shiftSelection(-1);
     else if (key === "ArrowDown") selectionController.shiftSelection(1);
   }
-  if (keyDownEvent) {
-    keyDownEvent.stopPropagation();
-    const key = keyDownEvent.key;
+  const handleKeyUp = event => {
+    event.stopPropagation();
+    const key = event.key;
     if (key === "Enter") selectionController.submitEntry();
-    else if (key == "Escape") onRequestClose();
+    else if (key == "Escape") {
+      onRequestClose();
+    }
   }
+  const onkeydownRef = useOnKeyDown(handleKeyDown);
+  const onkeyupRef = useOnKeyUp(handleKeyUp);
   return (
     <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
       <div ref={combinefuns(onkeydownRef, onkeyupRef)}>
@@ -52,20 +54,3 @@ export default function SearchableEntryList({
   );
 }
 
-function useKeyUpEvent() {
-  const [event, setEvent] = useState(null);
-  const ref = useOnKeyUp(event => {
-    setEvent(event);
-    setEvent(null);
-  });
-  return [event, ref];
-}
-
-function useKeyDownEvent() {
-  const [event, setEvent] = useState(null);
-  const ref = useOnKeyDown(event => {
-    setEvent(event);
-    setEvent(null);
-  });
-  return [event, ref];
-}
