@@ -14,20 +14,17 @@ export default function SearchableEntryList({
   onSelectEntry
 }) {
   const search = useSearch(entries, isLoading);
-  const selection = useSelection(
-    search.result,
-    entry => {
-      onSelectEntry(entry);
-      search.setQuery("");
-    }
-  );
-  const handleKeyDown = event => {
+  const selection = useSelection(search.result, entry => {
+    onSelectEntry(entry);
+    search.setQuery("");
+  });
+  function handleKeyDown(event) {
     event.stopPropagation();
     const key = event.key;
     if (key === "ArrowUp") selection.shiftBy(-1);
     else if (key === "ArrowDown") selection.shiftBy(1);
   }
-  const handleKeyUp = event => {
+  function handleKeyUp(event) {
     event.stopPropagation();
     const key = event.key;
     if (key === "Enter") selection.submit();
@@ -53,4 +50,3 @@ export default function SearchableEntryList({
     </div>
   );
 }
-
