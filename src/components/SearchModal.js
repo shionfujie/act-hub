@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, {  } from "react";
 import ReactModal from "react-modal";
-import SelectableList from "./SelectableEntryList";
-import { searchEntries } from "../util/actions";
+import SearchableEntryList from "./SearchableEntryList";
 
 export default function SearchModal({
   isOpen,
@@ -10,19 +9,13 @@ export default function SearchModal({
   onRequestClose,
   onSelectEntry
 }) {
-  const [filtered, setFiltered] = useState(entries)
-  const [q, setQuery] = useState('')
-  useEffect(() => {
-    if(isLoading) return
-    setFiltered(searchEntries(entries, q))
-  }, [q, entries, isLoading])
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
-      <SelectableList
-        entries={filtered}
-        onQueryChange={setQuery}
-        onSelectEntry={onSelectEntry}
+      <SearchableEntryList
+        isLoading={isLoading}
+        entries={entries}
         onRequestClose={onRequestClose}
+        onSelectEntry={onSelectEntry}
       />
     </Modal>
   );

@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import SearchEntryList from "./SearchEntryList";
-import SearchInput from "./SearchInput";
 import useOnKeyDown from "../hooks/useOnKeyDown";
 import useOnKeyUp from "../hooks/useOnKeyUp";
 import combinefuns from "../util/combineFuns";
 
 export default function SelectableList({
   entries,
-  onQueryChange,
   onSelectEntry,
   onRequestClose
 }) {
@@ -20,7 +18,6 @@ export default function SelectableList({
   function submitEntry() {
     const { extensionId, action } = entries[selectedIndex];
     onSelectEntry(extensionId, action);
-    onQueryChange("");
   }
   const onkeydownRef = useOnKeyDown(event => {
     event.stopPropagation();
@@ -34,15 +31,12 @@ export default function SelectableList({
     if (key === "Enter") submitEntry();
     else if (key == "Escape") {
       onRequestClose();
-      onQueryChange("");
     }
   });
   return (
     <div
       ref={combinefuns(onkeydownRef, onkeyupRef)}
-      className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden"
     >
-      <SearchInput onChange={onQueryChange} />
       {entries.length > 0 && (
         <SearchEntryList
           entries={entries}
