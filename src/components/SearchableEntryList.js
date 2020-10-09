@@ -4,8 +4,8 @@ import SearchEntryList from "./SearchEntryList";
 import useOnKeyDown from "../hooks/useOnKeyDown";
 import useOnKeyUp from "../hooks/useOnKeyUp";
 import combinefuns from "../util/combineFuns";
-import useSearchController from "../hooks/controllers/useSearchController";
-import useSelectionController from "../hooks/controllers/useSelectionController";
+import useSearch from "../hooks/controllers/useSearchController";
+import useSelection from "../hooks/controllers/useSelectionController";
 
 export default function SearchableEntryList({
   isLoading,
@@ -13,24 +13,21 @@ export default function SearchableEntryList({
   onRequestClose,
   onSelectEntry
 }) {
-  const searchController = useSearchController(entries, isLoading);
-  const selectionController = useSelectionController(
-    searchController.searchResult,
-    entry => {
-      onSelectEntry(entry);
-      searchController.setQuery("");
-    }
-  );
-  const handleKeyDown = event => {
+  const search = useSearch(entries, isLoading);
+  const selection = useSelection(search.result, entry => {
+    onSelectEntry(entry);
+    search.setQuery("");
+  });
+  function handleKeyDown(event) {
     event.stopPropagation();
     const key = event.key;
-    if (key === "ArrowUp") selectionController.shiftSelection(-1);
-    else if (key === "ArrowDown") selectionController.shiftSelection(1);
+    if (key === "ArrowUp") selection.shiftBy(-1);
+    else if (key === "ArrowDown") selection.shiftBy(1);
   }
-  const handleKeyUp = event => {
+  function handleKeyUp(event) {
     event.stopPropagation();
     const key = event.key;
-    if (key === "Enter") selectionController.submitEntry();
+    if (key === "Enter") selection.submit();
     else if (key == "Escape") {
       onRequestClose();
     }
@@ -40,17 +37,16 @@ export default function SearchableEntryList({
   return (
     <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
       <div ref={combinefuns(onkeydownRef, onkeyupRef)}>
-        <SearchInput onChange={searchController.setQuery} />
+        <SearchInput onChange={search.setQuery} />
       </div>
-      {searchController.searchResult.length > 0 && (
+      {search.result.length > 0 && (
         <SearchEntryList
-          entries={searchController.searchResult}
-          selectedIndex={selectionController.selectedIndex}
-          submitEntry={selectionController.submitEntry}
-          selectIndex={selectionController.selectIndex}
+          entries={search.result}
+          selectedIndex={selection.selectedIndex}
+          submitEntry={selection.submit}
+          selectIndex={selection.select}
         />
       )}
     </div>
   );
 }
-
