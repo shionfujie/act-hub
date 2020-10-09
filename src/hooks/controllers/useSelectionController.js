@@ -1,26 +1,26 @@
 import { useState, useEffect } from "react";
 
-export default function useSelectionController(entries, onSelectEntry) {
+export default function useSelection(entries, onSelectEntry) {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  function selectIndex(index) {
+  function select(index) {
     if (-1 < index && index < entries.length) setSelectedIndex(index);
   }
-  function shiftSelection(offset) {
+  function shiftBy(offset) {
     console.log(`selectionController.shiftSelection: selectedIndex=${selectedIndex}`)
-    selectIndex(selectedIndex + offset);
+    select(selectedIndex + offset);
   }
-  function submitEntry() {
+  function submit() {
     onSelectEntry(entries[selectedIndex]);
   }
   useEffect(() => {
-    selectIndex(0);
+    select(0);
   }, [entries]);
   console.log(`selectedIndex=${selectedIndex}`)
   return {
     entries,
     selectedIndex,
-    selectIndex,
-    shiftSelection,
-    submitEntry
+    select,
+    shiftBy,
+    submit
   };
 }
