@@ -31,10 +31,10 @@ function Main() {
         break;
     }
   };
-  const requestExecuteAction = (id, action) => {
+  const requestExecuteAction = ({ extensionId, action }) => {
     closeModal();
-    if (id === "internal") executeInternalAction(action);
-    else chrome.runtime.sendMessage(id, { type: "execute action", action });
+    if (extensionId === "internal") executeInternalAction(action);
+    else chrome.runtime.sendMessage(extensionId, { type: "execute action", action });
   };
   const updateKeyCombination = keyCombination => {
     closeKeyBinding();

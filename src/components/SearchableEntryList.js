@@ -15,8 +15,8 @@ export default function SearchableEntryList({
   const searchController = useSearchController(entries, isLoading);
   const selectionController = useSelectionController(
     searchController.searchResult,
-    ({ extensionId, action }) => {
-      onSelectEntry(extensionId, action);
+    entry => {
+      onSelectEntry(entry);
       searchController.setQuery("");
     }
   );
