@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from "react";
 import ReactModal from "react-modal";
-import SearchableList from "./SearchableList";
-import { sortActions } from "../util/actions";
+import SelectableList from "./SelectableEntryList";
+import { searchEntries } from "../util/actions";
 
 export default function SearchModal({
   isOpen,
   isLoading,
   entries,
   onRequestClose,
-  onSelectAction
+  onSelectEntry
 }) {
   const [filtered, setFiltered] = useState(entries)
   const [q, setQuery] = useState('')
   useEffect(() => {
     if(isLoading) return
-    setFiltered(sortActions(entries, q))
+    setFiltered(searchEntries(entries, q))
   }, [q, entries, isLoading])
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
-      <SearchableList
-        actions={filtered}
+      <SelectableList
+        entries={filtered}
         onQueryChange={setQuery}
-        onSelectAction={onSelectAction}
+        onSelectEntry={onSelectEntry}
         onRequestClose={onRequestClose}
       />
     </Modal>

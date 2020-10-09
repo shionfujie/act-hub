@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from "react";
-import SearchResult from "./SearchResult";
+import SearchEntryList from "./SearchEntryList";
 import SearchInput from "./SearchInput";
 import useOnKeyDown from "../hooks/useOnKeyDown";
 import useOnKeyUp from "../hooks/useOnKeyUp";
 import combinefuns from "../util/combineFuns";
 
-export default function SearchableList({
-  actions,
+export default function SelectableList({
+  entries,
   onQueryChange,
-  onSelectAction,
+  onSelectEntry,
   onRequestClose
 }) {
   const [selectedIndex, selectIndex] = useState(0);
-  useEffect(() => selectIndex(0), [actions]);
+  useEffect(() => selectIndex(0), [entries]);
   function shiftSelection(offset) {
     const index = selectedIndex + offset;
-    if (-1 < index && index < actions.length) selectIndex(index);
+    if (-1 < index && index < entries.length) selectIndex(index);
   }
-  function submitAction() {
-    const { extensionId, action } = actions[selectedIndex];
-    onSelectAction(extensionId, action);
+  function submitEntry() {
+    const { extensionId, action } = entries[selectedIndex];
+    onSelectEntry(extensionId, action);
     onQueryChange("");
   }
   const onkeydownRef = useOnKeyDown(event => {
@@ -31,7 +31,7 @@ export default function SearchableList({
   const onkeyupRef = useOnKeyUp(event => {
     event.stopPropagation();
     const key = event.key;
-    if (key === "Enter") submitAction();
+    if (key === "Enter") submitEntry();
     else if (key == "Escape") {
       onRequestClose();
       onQueryChange("");
@@ -43,11 +43,11 @@ export default function SearchableList({
       className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden"
     >
       <SearchInput onChange={onQueryChange} />
-      {actions.length > 0 && (
-        <SearchResult
-          actions={actions}
+      {entries.length > 0 && (
+        <SearchEntryList
+          entries={entries}
           selectedIndex={selectedIndex}
-          submitAction={submitAction}
+          submitEntry={submitEntry}
           selectIndex={selectIndex}
         />
       )}

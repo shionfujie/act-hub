@@ -20,7 +20,7 @@ function highlightedOnMouseEnter(C) {
 const normalClassName =
   "padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny";
 const highlightedClassName = `background-selected border-selected ${normalClassName}`;
-const SearchResultEntry = highlightedOnMouseEnter(
+const SearchEntry = highlightedOnMouseEnter(
   ({ title, isHighlighted, onMouseEnter, onClick }) => {
     const padding = isHighlighted ? { padding: "7px 3px 7px 11px" } : null;
     return (
@@ -37,7 +37,7 @@ const SearchResultEntry = highlightedOnMouseEnter(
     );
   }
 );
-export default SearchResultEntry
+export default SearchEntry
 // function SearchResultEntry({title, highlighted, onMouseEnter, onClick}) {
 //     const [isHighlighted, highlightEntry] = usePropSwitch(highlighted)
 //     const padding = isHighlighted ? { padding: "7px 3px 7px 11px" } : null

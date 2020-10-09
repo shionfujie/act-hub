@@ -1,6 +1,6 @@
 import equalsCaseInsensitively from "../util/compareCaseInsensitively";
 
-export function extensionSpecToEntries({ id, name, actions }) {
+export function extensionSpecToActions({ id, name, actions }) {
   return actions.map((action, index) => {
     return {
       key: `${id}-${index}`,
@@ -11,18 +11,18 @@ export function extensionSpecToEntries({ id, name, actions }) {
   });
 }
 
-// Sorts actions according to the match results of their titles
+// Sorts entries according to the match results of their titles
 // against q.
-export function sortActions(actions, q) {
+export function searchEntries(entries, q) {
   const sorted = [];
-  const ms = []; // Match results that represent ranks of actions
+  const ms = []; // Match results that represent ranks of entries
   
-  for (const action of actions) {
-    const m = match(action.title, q);
+  for (const entry of entries) {
+    const m = match(entry.title, q);
     if (m.count !== q.length) continue;
     for (var j = ms.length - 1; j >= 0 && (ms.length === 0 || lt(m, ms[j])); j--);
     ms.splice(j + 1, 0, m);
-    sorted.splice(j + 1, 0, action);
+    sorted.splice(j + 1, 0, entry);
   }
   return sorted;
 }

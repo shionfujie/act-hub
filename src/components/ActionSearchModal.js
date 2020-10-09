@@ -1,7 +1,7 @@
 /*global chrome*/
 import React, { useState, useEffect } from "react";
 import SearchModal from "./SearchModal";
-import { extensionSpecToEntries } from "../util/actions";
+import { extensionSpecToActions } from "../util/actions";
 
 export default function ActionSearchModal({
   isOpen,
@@ -15,7 +15,7 @@ export default function ActionSearchModal({
       isLoading={isLoading}
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      onSelectAction={onSelectAction}
+      onSelectEntry={onSelectAction}
     />
   );
 }
@@ -31,7 +31,7 @@ function useActions(isOpen) {
       actionSpecs => {
         const actions = [
           ...internalActions,
-          ...actionSpecs.flatMap(extensionSpecToEntries)
+          ...actionSpecs.flatMap(extensionSpecToActions)
         ];
         setActions(actions, "");
         setLoading(false);
