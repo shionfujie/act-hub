@@ -9,6 +9,7 @@ import useFocusCallback from "./hooks/useFocusCallback";
 import useOnKeyDown from "./hooks/useOnKeyDown";
 import combineFuns from "./util/combineFuns";
 import ActionSearchModal from "./components/ActionSearchModal";
+import SelectModal from "./components/SelectModal";
 
 function Main() {
   const shortcut = useShortcut();
@@ -34,7 +35,11 @@ function Main() {
   const requestExecuteAction = ({ extensionId, action }) => {
     closeModal();
     if (extensionId === "internal") executeInternalAction(action);
-    else chrome.runtime.sendMessage(extensionId, { type: "execute action", action });
+    else
+      chrome.runtime.sendMessage(extensionId, {
+        type: "execute action",
+        action
+      });
   };
   const updateKeyCombination = keyCombination => {
     closeKeyBinding();
@@ -52,6 +57,7 @@ function Main() {
         onRequestClose={closeKeyBinding}
         onConfirmed={updateKeyCombination}
       />
+      <SelectModal/>
     </>
   );
 }
