@@ -9,33 +9,10 @@ import useFocusCallback from "./hooks/useFocusCallback";
 import useOnKeyDown from "./hooks/useOnKeyDown";
 import combineFuns from "./util/combineFuns";
 import ActionSearchModal from "./components/ActionSearchModal";
-import SearchModal from "./components/SearchModal";
-
-function useOnMessage(listener) {
-  useEffect(() => {
-    chrome.runtime.onMessage.addListener(listener);
-  }, []);
-}
-
-function useChoices() {
-  const [optionsAndHandler, setOptionsAndHandler] = useState([null, false]);
-  useOnMessage((request) => {
-    switch (request.type) {
-      case "select":
-        const setChoice = result => {
-          chrome.runtime.sendMessage(request.senderId, {type: 'select/response', ...result})
-          setOptionsAndHandler([null, false]);
-        };
-        setOptionsAndHandler([request.options, true, setChoice]);
-        break;
-    }
-  });
-  return optionsAndHandler;
-}
+import SelectModal from "./components/SelectModal";
 
 function Main() {
   const shortcut = useShortcut();
-  const [options, selectModalIsOpen, setChoice] = useChoices();
   const [modalIsOpen, openModal, closeModal] = useSwitch();
   const [keybindingModalIsOpen, openKeybinding, closeKeyBinding] = useSwitch();
   useDocumentKeydown(event => {
@@ -80,18 +57,7 @@ function Main() {
         onRequestClose={closeKeyBinding}
         onConfirmed={updateKeyCombination}
       />
-      {selectModalIsOpen && (
-        <SearchModal
-          entries={options.map(({ displayName, value }) => ({
-            title: displayName,
-            value
-          }))}
-          isLoading={false}
-          isOpen={selectModalIsOpen}
-          onRequestClose={() => setChoice({ cancelled: true })}
-          onSelectEntry={selected => setChoice({ selected: selected.value })}
-        />
-      )}
+      <SelectModal/>
     </>
   );
 }
