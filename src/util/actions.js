@@ -19,7 +19,7 @@ export function searchEntries(entries, q) {
   
   for (const entry of entries) {
     const m = match(entry.title, q);
-    if (m.count !== q.length) continue;
+    if (m.length !== q.length) continue;
     for (var j = ms.length - 1; j >= 0 && (ms.length === 0 || lt(m, ms[j])); j--);
     ms.splice(j + 1, 0, m);
     sorted.splice(j + 1, 0, entry);
@@ -27,30 +27,65 @@ export function searchEntries(entries, q) {
   return sorted;
 }
 
-// Calculates parameters for the sorting.
+// Compute a match with minimum density.
 function match(title, q) {
   const ts = Array.from(title);
   const qs = Array.from(q);
-  var position = -1; // The first position that matches
-  var density = 0;   // The sum of distances between matches
-  var p;             // The Previous position that matched
-  var i = 0
-  var j = 0;
-  for (; i < ts.length && j < qs.length; i++) {
-    if (equalsCaseInsensitively(ts[i], qs[j])) {
-      if (j === 0) position = i;
-      else density += i - p;
-      p = i;
-      j++;
+  const stacks = [{ next: 0, density: 0, length: 0 }]
+  for (var i = 0; i < ts.length; i++) {
+    var prevLen = - 1
+    for (var j = 0; j < stacks.length; j++) {
+      const { next, length, last } = stacks[j]
+      if (length === qs.length || !equalsCaseInsensitively(ts[i], qs[next])) {
+        prevLen = length
+        continue;
+      }
+      if (length === 0) {
+        stacks[j].position = i
+      } else {
+        stacks[j].density += i - last
+      }
+      if (stacks[j].length === qs.length) {
+        stacks[j].next = null;
+      } else {
+        stacks[j].next = next + 1
+      }
+      stacks[j].length = length + 1
+      if (stacks[j].length === prevLen) {
+        stacks.splice(--j, 1);
+      }
+      stacks[j].last = i
+      prevLen = stacks[j].length;
+    }
+    if (stacks[stacks.length - 1].length !== 0) {
+      stacks.push({ next: 0, density: 0, length: 0 })
     }
   }
-  return { position, density, count: j };
+  return stacks[0];
 }
+// function match(title, q) {
+//   const ts = Array.from(title);
+//   const qs = Array.from(q);
+//   var position = -1; // The first position that matches
+//   var density = 0;   // The sum of distances between matches
+//   var p;             // The Previous position that matched
+//   var i = 0
+//   var j = 0;
+//   for (; i < ts.length && j < qs.length; i++) {
+//     if (equalsCaseInsensitively(ts[i], qs[j])) {
+//       if (j === 0) position = i;
+//       else density += i - p;
+//       p = i;
+//       j++;
+//     }
+//   }
+//   return { position, density, count: j };
+// }
 
 // Compares lexicographically.
 const lt = (m, m1) => {
-  if (m.count > m1.count) return true;
-  else if (m.count < m1.count) return false;
+  if (m.length > m1.length) return true;
+  else if (m.length < m1.length) return false;
   else {
     if (m.density < m1.density) return true;
     else if (m.density > m1.density) return false;
