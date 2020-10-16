@@ -16,11 +16,15 @@ export function extensionSpecToActions({ id, name, actions }) {
 export function searchEntries(entries, q) {
   const sorted = [];
   const ms = []; // Match results that represent ranks of entries
-  
+
   for (const entry of entries) {
     const m = match(entry.title, q);
     if (m.length !== q.length) continue;
-    for (var j = ms.length - 1; j >= 0 && (ms.length === 0 || lt(m, ms[j])); j--);
+    for (
+      var j = ms.length - 1;
+      j >= 0 && (ms.length === 0 || lt(m, ms[j]));
+      j--
+    );
     ms.splice(j + 1, 0, m);
     sorted.splice(j + 1, 0, entry);
   }
@@ -31,35 +35,30 @@ export function searchEntries(entries, q) {
 function match(title, q) {
   const ts = Array.from(title);
   const qs = Array.from(q);
-  const stacks = [{ next: 0, density: 0, length: 0 }]
+  const stacks = [{ next: 0, density: 0, length: 0 }];
   for (var i = 0; i < ts.length; i++) {
-    var prevLen = - 1
+    var prevLen = -1;
+    var stack;
     for (var j = 0; j < stacks.length; j++) {
-      const { next, length, last } = stacks[j]
-      if (length === qs.length || !equalsCaseInsensitively(ts[i], qs[next])) {
-        prevLen = length
+      stack = stacks[j]
+      if (stack.length === qs.length || !equalsCaseInsensitively(ts[i], qs[stack.next])) {
+        prevLen = stack.length;
         continue;
       }
-      if (length === 0) {
-        stacks[j].position = i
+      if (stack.length === 0) {
+        stack.position = i;
       } else {
-        stacks[j].density += i - last
+        stack.density += i - stack.last;
       }
-      if (stacks[j].length === qs.length) {
-        stacks[j].next = null;
-      } else {
-        stacks[j].next = next + 1
-      }
-      stacks[j].length = length + 1
-      if (stacks[j].length === prevLen) {
+      stack.next += 1;
+      stack.last = i;
+      stack.length += 1;
+      if (stack.length === prevLen) 
         stacks.splice(--j, 1);
-      }
-      stacks[j].last = i
-      prevLen = stacks[j].length;
+      prevLen = stack.length;
     }
-    if (stacks[stacks.length - 1].length !== 0) {
-      stacks.push({ next: 0, density: 0, length: 0 })
-    }
+    if (stack.length !== 0)
+      stacks.push({ next: 0, density: 0, length: 0 });
   }
   return stacks[0];
 }
