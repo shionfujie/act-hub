@@ -63,24 +63,6 @@ function match(title, q) {
   }
   return stacks[0];
 }
-// function match(title, q) {
-//   const ts = Array.from(title);
-//   const qs = Array.from(q);
-//   var position = -1; // The first position that matches
-//   var density = 0;   // The sum of distances between matches
-//   var p;             // The Previous position that matched
-//   var i = 0
-//   var j = 0;
-//   for (; i < ts.length && j < qs.length; i++) {
-//     if (equalsCaseInsensitively(ts[i], qs[j])) {
-//       if (j === 0) position = i;
-//       else density += i - p;
-//       p = i;
-//       j++;
-//     }
-//   }
-//   return { position, density, count: j };
-// }
 
 // Compares lexicographically.
 const lt = (m, m1) => {
