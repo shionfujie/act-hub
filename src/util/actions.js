@@ -53,8 +53,13 @@ function match(title, q) {
       stack.next += 1;
       stack.last = i;
       stack.length += 1;
-      if (stack.length === prevLen) 
-        stacks.splice(--j, 1);
+      if (stack.length === prevLen) {
+        if (lt(stack, stacks[j - 1]))
+          stacks.splice(j - 1, 1);
+        else
+          stacks.splice(j, 1);
+        j--;
+      }
       prevLen = stack.length;
     }
     if (stack.length !== 0)
