@@ -14,6 +14,9 @@ export function extensionSpecToActions({ id, name, actions }) {
 // Sorts entries according to the match results of their titles
 // against q.
 export function searchEntries(entries, q) {
+  if (q === '') 
+    return entries.sort(compareDates)
+
   const sorted = [];
   const ms = []; // Match results that represent ranks of entries
 
@@ -29,6 +32,22 @@ export function searchEntries(entries, q) {
     sorted.splice(j + 1, 0, entry);
   }
   return sorted;
+}
+
+function compareDates(e, e1) {
+  const primaryDate = (e) => {
+    const a = e.action
+    if ('lastUsed' in a)
+      return a['lastUsed']
+    else if ('installedAt' in a) 
+      return a['installedAt']
+    return ""
+  }
+  const p = primaryDate(e)
+  const p1 = primaryDate(e1)
+  if (p > p1) return - 1
+  else if (p === p1) return 0
+  else return 1
 }
 
 // Compute a match with minimum density.
