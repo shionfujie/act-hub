@@ -15,7 +15,10 @@ export default function ActionSearchModal({
       isLoading={isLoading}
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      onSelectEntry={onSelectAction}
+      onSelectEntry={entry => {
+        updateActionLastUsed(entry)
+        onSelectAction(entry)
+      }}
     />
   );
 }
@@ -45,6 +48,21 @@ function getActionSpecs(callback) {
   chrome.storage.sync.get({ actionSpecs: [] }, ({ actionSpecs }) =>
     callback(actionSpecs)
   );
+}
+
+function saveActionSpecs(actionSpecs) {
+  chrome.storage.sync.set({ actionSpecs });
+}
+
+function updateActionLastUsed(entry) {
+  const t = new Date().toISOString()
+  getActionSpecs(actionSpecs => {
+    const s = actionSpecs.find(s => s.id === entry.extensionId)
+    if (s === undefined) return
+    const a = s.actions.find(a => a.name === entry.action.name)
+    a['lastUsed'] = t
+    saveActionSpecs(actionSpecs)
+  })
 }
 
 const internalActions = [
