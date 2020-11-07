@@ -27,9 +27,11 @@ export default function SearchEntry({
 }
 
 function styleTitle(title, spans) {
+  if (!spans) 
+    return [title]
   const parts = []
   var p = 0
-  for (const span of spans || []) {
+  for (const span of spans) {
     parts.push(
       <span style={{fontWeight: 500}}>{
         title.slice(p, span.start)
