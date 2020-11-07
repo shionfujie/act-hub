@@ -29,8 +29,10 @@ export function searchEntries(entries, q) {
       j--
     );
     ms.splice(j + 1, 0, m);
-    sorted.splice(j + 1, 0, entry);
+    sorted.splice(j + 1, 0, {...entry, spans: m.spans});
   }
+  console.debug(`sorted:`)
+  console.debug(sorted)
   return sorted;
 }
 
@@ -65,9 +67,15 @@ function match(title, q) {
         continue;
       }
       if (stack.length === 0) {
-        stack.position = i;
+        stack.spans = [{start: i, end: i}]
       } else {
         stack.density += i - stack.last;
+        const lastSpan = stack.spans[stack.spans.length - 1]
+        if (lastSpan.end === i - 1)
+          lastSpan.end = i
+        else
+          stack.spans.push({ start: i, end: i })
+
       }
       stack.next += 1;
       stack.last = i;
@@ -95,8 +103,8 @@ const lt = (m, m1) => {
     if (m.density < m1.density) return true;
     else if (m.density > m1.density) return false;
     else {
-      if (m.position < m1.position) return true;
-      else if (m.position > m1.position) return false;
+      if (m.spans[0].start < m1.spans[0].start) return true;
+      else if (m.spans[0].start > m1.spans[0].start) return false;
       else return false;
     }
   }
