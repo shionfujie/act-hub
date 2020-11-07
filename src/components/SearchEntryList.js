@@ -11,6 +11,7 @@ export default function SearchEntryList({ entries, selectedIndex, selectIndex, s
             <SearchEntry
               key={entry.key}
               title={entry.title}
+              spans={entry.spans}
               highlighted={index === selectedIndex}
               onMouseEnter={() => selectIndex(index)}
               onClick={submitEntry}
