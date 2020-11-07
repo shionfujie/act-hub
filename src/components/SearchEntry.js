@@ -11,6 +11,22 @@ export default function SearchEntry({
   onClick
 }) {
   const padding = highlighted ? { padding: "7px 3px 7px 11px" } : null;
+  const styledTitle = styleTitle(title, spans)
+  return (
+    <li
+      className={highlighted ? highlightedClassName : normalClassName}
+      onMouseEnter={onMouseEnter}
+      onClick={onClick}
+      style={{ margin: 0, ...padding }}
+    >
+      <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">
+        {styledTitle}
+      </div>
+    </li>
+  );
+}
+
+function styleTitle(title, spans) {
   const parts = []
   var p = 0
   for (const span of spans || []) {
@@ -27,16 +43,5 @@ export default function SearchEntry({
       title.slice(p)
     }</span>
   )
-  return (
-    <li
-      className={highlighted ? highlightedClassName : normalClassName}
-      onMouseEnter={onMouseEnter}
-      onClick={onClick}
-      style={{ margin: 0, ...padding }}
-    >
-      <div className="shade-087 font-size-medium font-weight-medium line-height-medium overflow-ellipsis">
-        {parts}
-      </div>
-    </li>
-  );
+  return parts
 }
