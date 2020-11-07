@@ -31,8 +31,6 @@ export function searchEntries(entries, q) {
     ms.splice(j + 1, 0, m);
     sorted.splice(j + 1, 0, {...entry, spans: m.spans});
   }
-  console.debug(`sorted:`)
-  console.debug(sorted)
   return sorted;
 }
 
@@ -67,15 +65,14 @@ function match(title, q) {
         continue;
       }
       if (stack.length === 0) {
-        stack.spans = [{start: i, end: i}]
+        stack.spans = [{start: i, end: i + 1}]
       } else {
         stack.density += i - stack.last;
         const lastSpan = stack.spans[stack.spans.length - 1]
-        if (lastSpan.end === i - 1)
-          lastSpan.end = i
+        if (lastSpan.end === i)
+          lastSpan.end = i + 1
         else
-          stack.spans.push({ start: i, end: i })
-
+          stack.spans.push({ start: i, end: i + 1 })
       }
       stack.next += 1;
       stack.last = i;
