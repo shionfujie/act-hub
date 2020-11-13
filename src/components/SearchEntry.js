@@ -1,7 +1,7 @@
 import React from "react";
 
 const normalClassName =
-  "padding-left-small pointer padding-top-smaller padding-bottom-smaller padding-right-tiny";
+  "pointer";
 const highlightedClassName = `background-selected border-selected ${normalClassName}`;
 export default function SearchEntry({
   title,
@@ -10,7 +10,7 @@ export default function SearchEntry({
   onMouseEnter,
   onClick
 }) {
-  const padding = highlighted ? { padding: "7px 3px 7px 11px" } : null;
+  const padding = highlighted ? { padding: "7px 13px 7px 13px" } : { padding: "8px 14px 8px 14px"};
   const styledTitle = styleTitle(title, spans)
   return (
     <li
