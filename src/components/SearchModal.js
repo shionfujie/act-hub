@@ -49,7 +49,7 @@ function Modal({ isOpen, onRequestClose, children }) {
           maxWidth: 561,
           flexGrow: 1,
           border: 0,
-          borderRadius: 22,
+          borderRadius: 10,
           boxShadow: "0 1px 6px rgba(32,33,36,.28)"
         }
       }}
