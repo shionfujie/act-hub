@@ -8,7 +8,7 @@ export default function SearchInput({onChange}) {
       className="flexbox flexbox-align-center  padding-left-small padding-right-tiny"
       style={{ height: 44 }}
     >
-      <div className="flexbox flexbox-centered padding-left-smaller padding-right-medium shade-087">
+      <div className="flexbox flexbox-centered padding-right-medium shade-087" style={{paddingLeft: 2}}>
         <svg
           viewBox="0 0 32 32"
           xmlns="http://www.w3.org/2000/svg"

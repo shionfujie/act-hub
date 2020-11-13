@@ -46,11 +46,11 @@ function Modal({ isOpen, onRequestClose, children }) {
           marginTop: "20vh",
           marginLeft: 24,
           marginRight: 24,
-          maxWidth: 683,
+          maxWidth: 561,
           flexGrow: 1,
           border: 0,
-          borderRadius: 4,
-          boxShadow: "rgba(29, 17, 17, 0.15) 0px 5px 12px"
+          borderRadius: 10,
+          boxShadow: "0 1px 6px rgba(32,33,36,.28)"
         }
       }}
     >

@@ -35,7 +35,7 @@ export default function SearchableEntryList({
   const onkeydownRef = useOnKeyDown(handleKeyDown);
   const onkeyupRef = useOnKeyUp(handleKeyUp);
   return (
-    <div className="flexbox flexbox-direction-column flexbox-grow-1 radius-small border-width-normal border-solid border-color-shade-013 background-shade-003 overflow-hidden">
+    <div className="flexbox flexbox-direction-column flexbox-grow-1 overflow-hidden">
       <div ref={combinefuns(onkeydownRef, onkeyupRef)}>
         <SearchInput onChange={search.setQuery} />
       </div>
