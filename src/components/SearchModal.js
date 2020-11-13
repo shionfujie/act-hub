@@ -50,7 +50,7 @@ function Modal({ isOpen, onRequestClose, children }) {
           flexGrow: 1,
           border: 0,
           borderRadius: 4,
-          boxShadow: "rgba(29, 17, 17, 0.15) 0px 5px 12px"
+          boxShadow: "0 1px 6px rgba(32,33,36,.28)"
         }
       }}
     >
