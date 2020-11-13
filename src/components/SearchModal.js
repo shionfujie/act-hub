@@ -46,7 +46,7 @@ function Modal({ isOpen, onRequestClose, children }) {
           marginTop: "20vh",
           marginLeft: 24,
           marginRight: 24,
-          maxWidth: 683,
+          maxWidth: 561,
           flexGrow: 1,
           border: 0,
           borderRadius: 4,
