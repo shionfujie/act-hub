@@ -2,7 +2,7 @@
 
 chrome.management.onInstalled.addListener(({ id }) => {
   chrome.runtime.sendMessage(id, { type: "action spec" }, spec =>
-    storeActionSpec({ id, ...spec })
+    storeActionSpec({ id, ...spec, installedAt: new Date().toISOString() })
   );
 });
 
@@ -16,7 +16,7 @@ chrome.runtime.onMessageExternal.addListener((request, sender) => {
 
 function chooseFrom(senderId, options) {
   chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
-    chrome.tabs.sendMessage(tab.id, {type: 'select', senderId, options});
+    chrome.tabs.sendMessage(tab.id, { type: "select", senderId, options });
   });
 }
 
@@ -33,6 +33,7 @@ function storeActionSpec(thisSpec) {
     const index = actionSpecs.findIndex(
       thatSpec => thisSpec.id === thatSpec.id
     );
+    // If already there, updates the entry. Otherwise, newly adds it.
     if (index > -1) actionSpecs[index] = thisSpec;
     else actionSpecs.unshift(thisSpec);
     saveActionSpecs(actionSpecs);
