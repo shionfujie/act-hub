@@ -2,7 +2,7 @@
 
 chrome.management.onInstalled.addListener(({ id }) => {
   chrome.runtime.sendMessage(id, { type: "action spec" }, spec =>
-    storeActionSpec({ id, ...spec })
+    storeActionSpec({ id, ...spec, installedAt: new Date().toISOString() })
   );
 });
 

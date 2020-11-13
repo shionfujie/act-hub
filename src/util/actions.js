@@ -1,12 +1,12 @@
 import equalsCaseInsensitively from "../util/compareCaseInsensitively";
 
-export function extensionSpecToActions({ id, name, actions }) {
+export function extensionSpecToActions({ id, name, actions, installedAt }) {
   return actions.map((action, index) => {
     return {
       key: `${id}-${index}`,
       extensionId: id,
       title: action.displayName || `${name}: ${action.name}`,
-      action
+      action: {...action, installedAt}
     };
   });
 }
