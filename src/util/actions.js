@@ -15,7 +15,7 @@ export function extensionSpecToActions({ id, name, actions, installedAt }) {
 // against q.
 export function searchEntries(entries, q) {
   if (q === '') 
-    return entries.sort(compareDates)
+    return entries
 
   const sorted = [];
   const ms = []; // Match results that represent ranks of entries
@@ -34,7 +34,7 @@ export function searchEntries(entries, q) {
   return sorted;
 }
 
-function compareDates(e, e1) {
+export function compareDates(e, e1) {
   const primaryDate = (e) => {
     const a = e.action
     if ('lastUsed' in a)

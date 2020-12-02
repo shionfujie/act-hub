@@ -9,6 +9,7 @@ export default function SearchModal({
   onRequestClose,
   onSelectEntry
 }) {
+  console.debug("search modal: ", isOpen, isLoading, entries)
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <SearchableEntryList

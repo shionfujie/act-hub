@@ -1,7 +1,7 @@
 /*global chrome*/
 import React, { useState, useEffect } from "react";
 import SearchModal from "./SearchModal";
-import { extensionSpecToActions } from "../util/actions";
+import { extensionSpecToActions, compareDates } from "../util/actions";
 
 export default function ActionSearchModal({
   isOpen,
@@ -35,7 +35,7 @@ function useActions(isOpen) {
         const actions = [
           ...internalActions,
           ...actionSpecs.flatMap(extensionSpecToActions)
-        ];
+        ].sort(compareDates);
         setActions(actions, "");
         setLoading(false);
       }
