@@ -79,9 +79,9 @@ function match(title, q) {
       stack.length += 1;
       if (stack.length === prevLen) {
         if (lt(stack, stacks[j - 1]))
-          stacks.splice(j - 1, 1);
-        else
           stacks.splice(j, 1);
+        else
+          stacks.splice(j - 1, 1);
         j--;
       }
       prevLen = stack.length;
