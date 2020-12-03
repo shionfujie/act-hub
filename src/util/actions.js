@@ -63,6 +63,7 @@ function match(title, q) {
         continue;
       }
 
+      // Update the current match
       if (c.length === 0) {
         c.spans = [{start: i, end: i + 1}]
       } else {
@@ -78,6 +79,7 @@ function match(title, q) {
       c.length += 1;
 
       const p = matches[j - 1] // Previous match
+      // Compare the current and previous matches
       if (j === 0 || c.length !== p.length) {
         continue
       }
@@ -91,6 +93,7 @@ function match(title, q) {
         j--; 
       }
     }
+    // Ensure the last match to be a 'zero' awaiting
     if (c.length !== 0)
       matches.push({ next: 0, density: 0, length: 0 });
   }
