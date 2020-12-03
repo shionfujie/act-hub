@@ -77,18 +77,23 @@ function match(title, q) {
       stack.next += 1;
       stack.last = i;
       stack.length += 1;
-      if (stack.length === prevLen) {
-        if (lt(stack, stacks[j - 1]))
+      if (j > 0 && stack.length === stacks[j - 1].length) {
+        const p = stacks[j - 1]
+        if (lt(stack, p)) {
+          console.debug("Comparing:", "text:", title, ": q:", q, "current:", JSON.stringify(stack), "< previous:", JSON.stringify(stacks[j - 1]))
           stacks.splice(j - 1, 1);
-        else
+          // prevLen = stack.length;
+        } else if (p.last === i) {
+          console.debug("Comparing:", "text:", title, ": q:", q, "current:", JSON.stringify(stack), ">= previous:", JSON.stringify(stacks[j - 1]))
           stacks.splice(j, 1);
+        }
         j--;
       }
-      prevLen = stack.length;
     }
     if (stack.length !== 0)
       stacks.push({ next: 0, density: 0, length: 0 });
   }
+  console.debug("Matching:", "text:", title, ": q:", q,":final stacks:", stacks)
   return stacks[0];
 }
 
