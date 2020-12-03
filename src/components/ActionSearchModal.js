@@ -11,6 +11,7 @@ export default function ActionSearchModal({
   const [actions, isLoading] = useActions(isOpen);
   return (
     <SearchModal
+      hint={"What do you want to Actub to do?"}
       entries={actions}
       isLoading={isLoading}
       isOpen={isOpen}

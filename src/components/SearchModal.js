@@ -5,6 +5,7 @@ import SearchableEntryList from "./SearchableEntryList";
 export default function SearchModal({
   isOpen,
   isLoading,
+  hint,
   entries,
   onRequestClose,
   onSelectEntry
@@ -14,6 +15,7 @@ export default function SearchModal({
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
       <SearchableEntryList
         isLoading={isLoading}
+        hint={hint}
         entries={entries}
         onRequestClose={onRequestClose}
         onSelectEntry={onSelectEntry}
