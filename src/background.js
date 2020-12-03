@@ -7,16 +7,17 @@ chrome.management.onInstalled.addListener(({ id }) => {
 });
 
 chrome.runtime.onMessageExternal.addListener((request, sender) => {
+  console.debug("incoming external request: ", request)
   switch (request.type) {
     case "select": {
-      chooseFrom(sender.id, request.options);
+      chooseFrom(sender.id, request.hint, request.options);
     }
   }
 });
 
-function chooseFrom(senderId, options) {
+function chooseFrom(senderId, hint, options) {
   chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
-    chrome.tabs.sendMessage(tab.id, { type: "select", senderId, options });
+    chrome.tabs.sendMessage(tab.id, { type: "select", senderId, hint, options });
   });
 }
 

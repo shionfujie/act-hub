@@ -9,6 +9,7 @@ import useSelection from "../hooks/controllers/useSelectionController";
 
 export default function SearchableEntryList({
   isLoading,
+  hint,
   entries,
   onRequestClose,
   onSelectEntry
@@ -37,7 +38,7 @@ export default function SearchableEntryList({
   return (
     <div className="flexbox flexbox-direction-column flexbox-grow-1 overflow-hidden">
       <div ref={combinefuns(onkeydownRef, onkeyupRef)}>
-        <SearchInput onChange={search.setQuery} />
+        <SearchInput hint={hint} onChange={search.setQuery} />
       </div>
       {search.result.length > 0 && (
         <SearchEntryList

@@ -45,6 +45,10 @@
     color: #222 !important;
 }
 
+.shade-087::placeholder {
+    color: #222 !important;
+}
+
 .shade-100 {
     color: #fff
 }
