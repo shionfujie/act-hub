@@ -54,49 +54,48 @@ export function compareDates(e, e1) {
 function match(title, q) {
   const ts = Array.from(title);
   const qs = Array.from(q);
-  const stacks = [{ next: 0, density: 0, length: 0 }];
+  const matches = [{ next: 0, density: 0, length: 0 }];
   for (var i = 0; i < ts.length; i++) {
-    var stack;
-    for (var j = 0; j < stacks.length; j++) {
-      stack = stacks[j]
-      if (stack.length === qs.length || !equalsCaseInsensitively(ts[i], qs[stack.next])) {
+    var c; // Current match
+    for (var j = 0; j < matches.length; j++) {
+      c = matches[j]
+      if (c.length === qs.length || !equalsCaseInsensitively(ts[i], qs[c.next])) {
         continue;
       }
 
-      
-      if (stack.length === 0) {
-        stack.spans = [{start: i, end: i + 1}]
+      if (c.length === 0) {
+        c.spans = [{start: i, end: i + 1}]
       } else {
-        stack.density += i - stack.last;
-        const lastSpan = stack.spans[stack.spans.length - 1]
+        c.density += i - c.last;
+        const lastSpan = c.spans[c.spans.length - 1]
         if (lastSpan.end === i)
           lastSpan.end = i + 1
         else
-          stack.spans.push({ start: i, end: i + 1 })
+          c.spans.push({ start: i, end: i + 1 })
       }
-      stack.next += 1;
-      stack.last = i;
-      stack.length += 1;
+      c.next += 1;
+      c.last = i;
+      c.length += 1;
 
-      if (j === 0 || stack.length !== stacks[j - 1].length) {
+      const p = matches[j - 1] // Previous match
+      if (j === 0 || c.length !== p.length) {
         continue
       }
-      const p = stacks[j - 1]
-      if (lt(stack, p)) {
-        console.debug("Comparing:", "text:", title, ": q:", q, "current:", JSON.stringify(stack), "< previous:", JSON.stringify(stacks[j - 1]))
-        stacks.splice(j - 1, 1);
+      if (lt(c, p)) {
+        console.debug("Comparing:", "text:", title, ": q:", q, "current:", JSON.stringify(c), "< previous:", JSON.stringify(matches[j - 1]))
+        matches.splice(j - 1, 1);
         j--; 
       } else if (p.last === i) {
-        console.debug("Comparing:", "text:", title, ": q:", q, "current:", JSON.stringify(stack), ">= previous:", JSON.stringify(stacks[j - 1]))
-        stacks.splice(j, 1);
+        console.debug("Comparing:", "text:", title, ": q:", q, "current:", JSON.stringify(c), ">= previous:", JSON.stringify(matches[j - 1]))
+        matches.splice(j, 1);
         j--; 
       }
     }
-    if (stack.length !== 0)
-      stacks.push({ next: 0, density: 0, length: 0 });
+    if (c.length !== 0)
+      matches.push({ next: 0, density: 0, length: 0 });
   }
-  console.debug("Matching:", "text:", title, ": q:", q,":final stacks:", stacks)
-  return stacks[0];
+  console.debug("Matching:", "text:", title, ": q:", q,":final stacks:", matches)
+  return matches[0];
 }
 
 // Compares lexicographically.
