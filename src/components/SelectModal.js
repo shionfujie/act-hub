@@ -3,10 +3,11 @@ import React, { useState, useEffect } from "react";
 import SearchModal from "./SearchModal";
 
 export default function SelectModal() {
-  const [options, isOpen, setChoice] = useChoices();
+  const [hint, options, isOpen, setChoice] = useChoices();
   return (
     isOpen && (
       <SearchModal
+        hint={hint}
         entries={options.map(({ displayName, value }) => ({
           title: displayName,
           value
@@ -27,7 +28,7 @@ function useOnMessage(listener) {
 }
 
 function useChoices() {
-  const [optionsAndHandler, setOptionsAndHandler] = useState([null, false]);
+  const [optionsAndHandler, setOptionsAndHandler] = useState([null, null, false]);
   useOnMessage(request => {
     switch (request.type) {
       case "select":
@@ -36,9 +37,9 @@ function useChoices() {
             type: "select/response",
             ...result
           });
-          setOptionsAndHandler([null, false]);
+          setOptionsAndHandler([null, null, false]);
         };
-        setOptionsAndHandler([request.options, true, setChoice]);
+        setOptionsAndHandler([request.hint, request.options, true, setChoice]);
         break;
     }
   });
