@@ -56,12 +56,10 @@ function match(title, q) {
   const qs = Array.from(q);
   const stacks = [{ next: 0, density: 0, length: 0 }];
   for (var i = 0; i < ts.length; i++) {
-    var prevLen = -1;
     var stack;
     for (var j = 0; j < stacks.length; j++) {
       stack = stacks[j]
       if (stack.length === qs.length || !equalsCaseInsensitively(ts[i], qs[stack.next])) {
-        prevLen = stack.length;
         continue;
       }
       if (stack.length === 0) {
