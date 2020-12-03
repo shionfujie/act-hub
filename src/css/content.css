@@ -47,6 +47,7 @@
 
 .shade-087::placeholder {
     color: #222 !important;
+    opacity: 1;
 }
 
 .shade-100 {
