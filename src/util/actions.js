@@ -85,12 +85,12 @@ function match(title, q) {
       if (lt(stack, p)) {
         console.debug("Comparing:", "text:", title, ": q:", q, "current:", JSON.stringify(stack), "< previous:", JSON.stringify(stacks[j - 1]))
         stacks.splice(j - 1, 1);
-        // prevLen = stack.length;
+        j--; 
       } else if (p.last === i) {
         console.debug("Comparing:", "text:", title, ": q:", q, "current:", JSON.stringify(stack), ">= previous:", JSON.stringify(stacks[j - 1]))
         stacks.splice(j, 1);
+        j--; 
       }
-      j--; 
     }
     if (stack.length !== 0)
       stacks.push({ next: 0, density: 0, length: 0 });
