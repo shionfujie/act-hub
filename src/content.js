@@ -25,6 +25,7 @@ function Main() {
       event.stopPropagation();
     }
   });
+  
   const executeInternalAction = action => {
     switch (action.type) {
       case "keybinding":

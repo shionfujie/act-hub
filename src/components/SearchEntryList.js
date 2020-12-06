@@ -10,6 +10,7 @@ export default function SearchEntryList({ entries, selectedIndex, selectIndex, s
           return (
             <SearchEntry
               key={entry.key}
+              iconUrl={entry.iconUrl}
               title={entry.title}
               spans={entry.spans}
               highlighted={index === selectedIndex}

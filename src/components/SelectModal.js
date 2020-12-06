@@ -8,9 +8,10 @@ export default function SelectModal() {
     isOpen && (
       <SearchModal
         hint={hint}
-        entries={options.map(({ displayName, value }) => ({
+        entries={options.map(({ displayName, value, iconUrl }) => ({
           title: displayName,
-          value
+          value,
+          iconUrl
         }))}
         isLoading={false}
         isOpen={isOpen}
