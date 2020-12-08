@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { cyclicModulo } from "../../util/math";
 
 export default function useSelection(entries, onSelectEntry) {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -7,7 +8,7 @@ export default function useSelection(entries, onSelectEntry) {
   }
   function shiftBy(offset) {
     console.log(`selectionController.shiftSelection: selectedIndex=${selectedIndex}`)
-    select(selectedIndex + offset);
+    select(cyclicModulo(selectedIndex + offset, entries.length));
   }
   function submit() {
     onSelectEntry(entries[selectedIndex]);
